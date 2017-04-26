@@ -1363,7 +1363,7 @@ function animal_adoptions_data_collection_submit($form, &$form_state) {
   /*redirect*/
 
 
-  drupal_set_message(t('Thank you for your submission.  We will email you a status update once we review your applicaition.'), 'status');
+  drupal_set_message(t('Thank you for your submission.  We will contact you once we review your applicaition.'), 'status');
   $url = 'node/' . $adopting;
   // send them
   $form_state['redirect'] = $url;

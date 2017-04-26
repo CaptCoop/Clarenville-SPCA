@@ -597,11 +597,11 @@ function build_foster_review_form($form, &$form_state) {
     <p><strong>Other pets in the home: </strong>' . $app->other_pets . '</p>
     <p><strong>Does your house have stairs: </strong>' . $app->house_w_stairs . '</p>
     <p><strong>Any pregnant women in the home: </strong>' . $app->planned_pregnancy . '</p>
-    <p><strong>Seperate room available: </strong>' . $app->seperate_room . '</p>
+    <p><strong>Separate room available: </strong>' . $app->seperate_room . '</p>
     <p><strong>Access to reliable transport: </strong>' . $app->transport . '</p>
-    <p><strong>How long will animal be alone for: </strong>' . $app->alone_time . '</p>
-    <p><strong>Where will animal be kept when your home: </strong>' . $app->kept_home . '</p>
-    <p><strong>Where will animal be kept when your NOT home: </strong>' . $app->not_kept_home . '</p>
+    <p><strong>How long will animal be alone: </strong>' . $app->alone_time . '</p>
+    <p><strong>Where will animal be kept when you are home: </strong>' . $app->kept_home . '</p>
+    <p><strong>Where will animal be kept when you are NOT home: </strong>' . $app->not_kept_home . '</p>
     <p><strong>Where will the animal sleep: </strong>' . $app->sleep . '</p>';
 
 
