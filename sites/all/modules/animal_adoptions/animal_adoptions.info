@@ -1,0 +1,6 @@
+name = SPCA Clarenville Animal Adoptions
+description = This module gives a registered user the ability to apply for adoption and complete an adoption contract ready for printing
+core = 7.x
+package = SPCA
+files [] = animal_adoptions.module
+dependencies[] = webform

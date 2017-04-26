@@ -1,0 +1,3152 @@
+<?php
+
+/**
+ * @file
+ * The main module file.  This file contains all the admin functions for animal adoptions.
+ * It is also the starting point for animal fostering and animal requests.
+ */
+
+/**
+ *
+ *Customized permissions for access control
+ *
+ */
+function animal_adoptions_permission() {
+  return array(
+    'administer adoptions' => array(
+      'title' => t('Administer incoming adoption applications and approval'),
+      'description' => t('Perform administration tasks for all aspects of adoptions'),
+    ),
+    'access adoptions' => array(
+      'title' => t('Registered users can apply to adopt animals'),
+      'description' => t('Only registered users can access any of the applications'),
+    ),
+    'adminster fosters' => array(
+      'title' => t('Administer incoming foster applications and approval'),
+      'description' => t('Perform administration tasks for all aspects of foster'),
+    ),
+    'access fosters' => array(
+      'title' => t('Registered users can apply to foster animals'),
+      'description' => t('Only registered users can access any of the applications'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function animal_adoptions_menu() {
+  /*animal ID comes in here as an argument*/
+
+
+  $items['content/adoption-form'] = array(
+    'title' => 'Animal Adoption Policies & Application',
+    'description' => 'Users must fill this form out prior to adopting',
+    'page callback' => 'build_adoption_form',
+    'access arguments' => array('access adoptions'),
+  );
+  /*For those with Editor privlidges and above.  Displays all adoption applications*/
+
+
+  $items['staff/adoptions'] = array(
+    'title' => 'Review Adoption Applications',
+    'description' => 'Where adoptions get approved or rejected',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('build_adoption_review_form'),
+    'access arguments' => array('administer adoptions'),
+  );
+  /*animal ID comes in here as an argument*/
+
+
+  $items['content/foster-form'] = array(
+    'title' => 'Animal Foster Policies & Application',
+    'description' => 'Users must fill this form out prior to fostering',
+    'page callback' => 'animal_adoptions_build_foster_form',
+    'file' => 'animal_adoptions_foster.inc',
+    'access arguments' => array('access adoptions'),
+  );
+  /*For those with Editor privlidges and above.  Displays all adoption applications*/
+
+
+  $items['staff/foster'] = array(
+    'title' => 'Review Foster Applications',
+    'description' => 'Where foster applications get approved or rejected',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('build_foster_review_form'),
+    'access arguments' => array('adminster fosters'),
+    'file' => 'animal_adoptions_foster.inc',
+  );
+  /*For those with Editor privlidges and above.  Displays all animal request matches*/
+
+
+  $items['staff/animal-request-matches'] = array(
+    'title' => 'Review Animal Request Matches',
+    'description' => 'Where animal request discovered matches are displayed',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('build_animal_request_match_form'),
+    'access arguments' => array('administer adoptions'),
+    'file' => 'animal_request_match.inc',
+  );
+  /*adoption ID comes in here as an argument*/
+
+
+  $items['contract/adoption-contract'] = array(
+    'title' => 'Adoption Contract',
+    'description' => 'Preview for printing',
+    'page callback' => 'build_complete_adoption_contract',
+    'access arguments' => array('access adoptions'),
+  );
+  /*adoption ID comes in here as an argument*/
+
+
+  //$items['staff/adoption-application-review'] = array(
+  //  'title' => 'Ajax Link (Renderable Array)',
+  //  'page callback' => 'animal_adoptions_render_review_page',
+  //  'access arguments' => array('access adoptions'),
+  //);
+  //$items['adoption_link_callback'] = array(
+  //  'page callback' => 'adoption_review_response',
+  //  'access callback' => 'user_access',
+  //  'access arguments' => array('access content'),
+  //  'type' => MENU_CALLBACK,
+  //  //'file' => 'ajax_example_misc.inc',
+  //);
+  ////save button on the staff adoption review tab
+  //$items['staff/adoption_application_callback'] = array(
+  //  'page callback' => 'animal_adoption_save_updates',
+  //  'access callback' => 'user_access',
+  //  'access arguments' => array('access content'),
+  //  'type' => MENU_CALLBACK,
+  //);
+  return $items;
+}
+
+/**
+ *
+ *
+ */
+//function animal_adoptions_render_review_page($form, &$form_state) {
+//
+//
+//    // Table settings.
+//  $attributes['datatable_options'] = array(
+//    'bFilter'   => TRUE,
+//    'bInfo'     => TRUE,
+//  );
+//  // Define table columns
+//  $header = array(
+//    array(
+//      'data' => t('ID'),
+//      'datatable_options' => array(
+//        'bSortable' => TRUE,
+//        'bSearchable' => TRUE,
+//      ),
+//    ),
+//    array(
+//      'data' => t('Animal Name'),
+//      'datatable_options' => array(
+//        'bSortable' => TRUE,
+//        'bSearchable' => TRUE,
+//      ),
+//    ),
+//    array(
+//      'data' => t('Username'),
+//      'datatable_options' => array(
+//        'bSortable' => TRUE,
+//        'bSearchable' => TRUE,
+//      ),
+//    ),
+//    array(
+//      'data' => t('Status'),
+//      'datatable_options' => array(
+//        'bSortable' => TRUE,
+//        'bSearchable' => TRUE,
+//      ),
+//    ),
+//  );
+//  // Table data.
+//
+//  //build the tables contents row by row
+//  /*get all the adoption applications*/
+//  $applications = get_adoption_applications();
+// $row_holder = array();
+//  /*build the output*/
+// add in the rest
+//  if($applications){
+//    while($row = $applications->fetchAssoc()){
+// error check
+//      if(!isset($row['approved'])){
+//        $approval_state = 'Waiting';
+//      }
+//      else{
+//        $approval_state = $row['approved'];
+//      }
+//      /*get the user name*/
+//      $urse_name = get_username_by_id($row['user_id']);
+//      /*get the animal name*/
+//      $ansn_name = get_animal_name_by_id($row['animal_id']);
+//
+//
+//      $nextinline = array( l(t('View'), '/adoption_link_callback/'.$row['id'], array('attributes' => array('class' => array('use-ajax')))), check_plain($ansn_name->title), check_plain($urse_name->name), check_plain($approval_state));
+// collect the row data to display in jquery table
+//      array_push($row_holder, $nextinline);
+//    }
+//  }
+//
+//
+//
+//  // Render using Drupal's render API.
+//  $form['datatable'] = array(
+//    '#theme' => 'datatable',
+//    '#header' => $header,
+//    '#rows' => $row_holder,
+//    '#attributes' => $attributes,
+//  );
+//
+//
+//  //-------------------
+//  /*load the select list with whats in the adopt table*/
+//  //$available = get_all_adoption_ids();
+//
+//  // This fieldset just serves as a container for the part of the form
+//  // that gets rebuilt.
+//  $form['questions_fieldset'] = array(
+//    '#type' => 'fieldset',
+//    // These provide the wrapper referred to in #ajax['wrapper'] above.
+//    '#prefix' => '<div id="current-adoption-fieldset-wrapper">',
+//    '#suffix' => '</div>',
+//  );
+//  //submit button for edible details
+//  //$form['questions_fieldset']['saver'] = array(
+//  //  '#type' => 'submit',
+//  //  '#value' => t('Save'),
+//  //  '#prefix' => '<div>',
+//  //  '#suffix' => '</div>',
+//  //  '#ajax' => array(
+//  //    'wrapper' => 'adopt-notes',
+//  //    'callback' => 'refresh_adoption_review_table',
+//  //    'effect' => 'fade',
+//  //  ),
+//  //);
+//  return $form;
+//}
+
+/**
+ *This function gets called when the "view" link is clicked in the adoption table
+ *
+ */
+//function adoption_review_response($req_id, $type = 'ajax') {
+//  if ($type == 'ajax') {
+//
+//  /*build the tabs that all the content will get loaded in*/
+//  $output2 = '<div id=current-adoption-fieldset-wrapper><div class="tabs-classic"><h3>Application <span>Details</span></h3>'.
+//    '<ul class="nav nav-tabs">
+//	<li class="active"><a data-toggle="tab" href="#home2">ANIMAL</a></li>
+//	<li><a data-toggle="tab" href="#tabone">USER</a></li>
+//	<li><a data-toggle="tab" href="#tabtwo">APPLICATION</a></li>
+//        <li><a data-toggle="tab" href="#tabthree">FILE</a></li>
+//    </ul>';
+//
+//  /*get the details for the first record*/
+//  $first = get_animal_details_from_adopt_app($req_id);
+//  if(!$first){
+//    $first['name'] = 'no data';
+//    $first['status'] == 'no data';
+//    $first['animal_status'] == 'no data';
+//    $first['spayed'] == 'no data';
+//    $first['url']= 'no data';
+//  }
+//
+//  $output2 .= '<div class="tab-content"><div class="tab-pane active" id="home2"><img class="pull-left" src='.file_create_url($first['image']).' width="100px"/>
+//<p><strong>Name: </strong>'.l(t($first['name']), $first['url'], array('attributes' => array('target' => '_blank'), 'options' => array('relative' => TRUE))).'</p>
+//<p><strong>Status: </strong>'.$first['status'].'</p>';
+//  $pad = ($first['spayed'] ? 'YES' : 'NO' );
+//  $output2 .= '<p><strong>Spayed/Neutered:</strong> '.$pad.'</p></div>';
+//
+//
+//  /*get the user detals of the application*/
+//  /*$applicant holds username, email*/
+//  $applicant = get_user_from_adopt_app($req_id);
+//  if(!$applicant){
+//    $applicant['name'] = 'no data';
+//    $applicant['email'] = 'no data';
+//    $applicant['fullname'] = 'no data';
+//    $applicant['full_mailing_address'] = 'no data';
+//    $applicant['ppic'] = 'no data';
+//    $applicant['contact_number'] = 'no data';
+//    $applicant['cell_number'] = 'no data';
+//  }
+//  $output2 .= '<div class="tab-pane" id="tabone"><img class="pull-left" src='.file_create_url($applicant['ppic']).' width=100px/>
+//  <p><strong>Username:</strong> '.$applicant['name'].'</p>
+//  <p><strong>Full Name:</strong> '.$applicant['fullname'].'</p>
+//  <p><strong>Email:</strong> '.$applicant['email'].'</p>
+//  <p><strong>Mailing Address:</strong> '.$applicant['full_mailing_address'].'</p>
+//  <p><strong>Home Number: </strong>'.$applicant['contact_number'].'</p>
+//  <p><strong>Cell Number: </strong>'.$applicant['cell_number'].'</p></div>';
+//
+//  /*get the application that was filled*/
+//  /*$app is an object item*/
+//  $app = get_adoption_application_details($applicant['uid']);
+//
+//  /*transpose living arrangements and home state to readablke form*/
+//  $home = get_applicant_home_state_vocab($app->home_state);
+//  $live = get_applicant_living_conditions_vocab($app->living_arg);
+//
+//
+//  $newtime = strtotime($applicant['date_init']);
+//  $didate = date('d-M-Y', $newtime);
+//  $output2 .= '<div class="tab-pane" id="tabtwo">
+//  <p><strong>Date Initinated: </strong> '.$didate.'</p>
+//  <p><strong>Home Enviroment:</strong> '.$home->name.'</p>
+//  <p><strong>Living Arrangements:</strong> '.$live->name.'</p>';
+//  if($app->renting){
+//    $output2 .=  '<p><strong>Renting for:</strong> '.$app->renting.' </p>';
+//  }
+//  else{
+//    $output2 .= '<p><strong>Renting for:</strong> no data</p>';
+//  }
+//  if($app->landlord){
+//    $output2 .=  '<p><strong>Landlords name and number:</strong> '.$app->landlord.'</p>';
+//  }
+//  else{
+//    $output2 .= '<p><strong>Landlords name and number:</strong> no data</p>';
+//  }
+//  if($app->other_adults){
+//    $output2 .=  '<p><strong>Other adults livining in the home:</strong> '.$app->other_adults.'</p>';
+//  }
+//  else{
+//    $output2 .= '<p><strong>Other adults livining in the home:</strong> no data</p>';
+//  }
+//  if($app->child_age){
+//    $output2 .=  '<p><strong>Ages of children: </strong>'.$app->child_age.'</p>';
+//  }
+//  else{
+//    $output2 .= '';
+//  }
+//  //past pet here
+//  if($app->past_branch == 1){
+//    $output2 .=  '<p><strong>Adopted in the past: </strong>'.$app->past_adopt.'  <strong>form: </strong>'.$app->past_branch.'</p>';
+//  }
+//  else{
+//    $output2 .= '<p><strong>Adopted in the past: </strong>NO';
+//  }
+//  if($app->past_crime == 1){
+//    $output2 .=  '<p><strong>Past crime history: YES</strong></p>';
+//  }
+//  else{
+//    $output2 .= '<p><strong>Past crime history:</strong> NO</p>';
+//  }
+//  if($app->adopt_cost == 1){
+//    $output2 .=  '<p><strong>Aware of animal cost:</strong> YES</p>';
+//  }
+//  else{
+//    $output2 .= '<p><strong>Aware of animal cost:</strong> NO</p>';
+//  }
+//  if($app->adopt_spay == 1){
+//    $output2 .=  '<p><strong>Are you prepared to spay/neuter your pet:</strong> YES</p>';
+//  }
+//  else{
+//    $output2 .= '<p><strong>Are you prepared to spay/neuter your pet:</strong> NO</p>';
+//  }
+//  if(isset($app->dog_live)){
+//    if($app->dog_live == 1){
+//      $output2 .=  '<p><strong>Will dog live in home:</strong> YES</p>';
+//    }
+//    else{
+//      $output2 .= '<p><strong>Will dog live in home:</strong> NO</p>';
+//    }
+//  }
+//  if(isset($app->dog_train)){
+//    if($app->dog_train == 1){
+//      $output2 .=  '<p><strong>Will you train and house train:</strong> YES</p>';
+//    }
+//    else{
+//      $output2 .= '<p><strong>Will you train and house train:</strong> NO</p>';
+//    }
+//  }
+//  if(isset($app->dog_run)){
+//    if($app->dog_run == 1){
+//      $output2 .=  '<p><strong>Have yard or dog run: </strong>YES</p>';
+//    }
+//    else{
+//      $output2 .= '<p><strong>Have yard or dog run: </strong>NO</p>';
+//    }
+//  }
+//  if(isset($app->cat_house)){
+//    if($app->cat_house == 1){
+//      $output2 .=  '<p><strong>Will this be house cat only: </strong>YES</p>';
+//    }
+//    else{
+//      $output2 .= '<p><strong>Will this be house cat only: </strong>NO</p>';
+//    }
+//  }
+//  if(isset($app->cat_spayed)){
+//    if($app->cat_spayed == 1){
+//      $output2 .=  '<p><strong>Will cat be allowed outside after spayed/neutered: </strong>YES</p>';
+//    }
+//    else{
+//      $output2 .= '<p><strong>Will cat be allowed outside after spayed/neutered: </strong>NO</p>';
+//    }
+//  }
+//  if(isset($app->cat_scratch)){
+//    if($app->cat_scratch == 1){
+//      $output2 .=  '<p><strong>Do you know cats scratch furniture: </strong>YES</p>';
+//    }
+//    else{
+//      $output2 .= '<p><strong>Do you know cats scratch furniture: </strong>NO</p>';
+//    }
+//  }
+//    if($app->past_pets == 1){
+//      $output2 .=  '<p><h3>Past/Present Pet Information</h3><strong>Past Pets: </strong>YES</p>';
+//    }
+//    else{
+//      $output2 .= '<p><h3>Past/Present Pet Information</h3><strong>Past Pets:</strong>NO</p>';
+//    }
+//    if($app->past_pets == 1){
+//      $output2 .=  '<p><strong>Breed and name: </strong>'.$app->past_breed.'  <br/><strong>Age: </strong>'.$app->past_age.'  <br/><strong>Sex: </strong>'.($app->past_sex==1 ? 'MALE' : 'FEMALE').'  <br/><strong>Spayed/Neutered:</strong> '.($app->past_spayed==1 ? 'YES' : 'NO').'  <br/><strong>Name of vet:</strong> '.$app->past_vet.' <br/><strong>Still own:</strong> '.($app->past_own==1 ? 'YES' : 'NO').'</p>';
+//    }
+//
+//    if($app->past_not_own){
+//      $output2 .=  '<p><strong>Pet is now: </strong>'.$app->past_not_own.'</p>';
+//    }
+//
+//    if($app->cur_vet_name == 1){
+//      $output2 .=  '<p><strong>Current vet:</strong> YES  <strong>Name:</strong> '.$app->cur_vet_name.'</p>';
+//    }
+//
+//
+//  $output2.= '<form method="post"><button class="buton b_green-1 buton-1 buton-mini" formaction="/contract/adoption-contract/'.check_plain($req_id).'" formmethod="post" style="float:left" type="submit">PREVIEW CONTRACT</button></form>
+//  </div>';
+//
+//  /*get the application status for the selected animal*/
+//  $status_cur = get_adoption_status_by_id($req_id);
+//
+//  //select the discovered value
+//  $output2 .= '<div class="tab-pane" id="tabthree">Application Status<br/><form method="post" action="/staff/adoption_application_callback/'.check_plain($req_id).'"><select id="selector"><option value="Waiting">Waiting</option>';
+//  if(strcasecmp($status_cur['state'], 'In Review')==0){
+//    $output2 .= '<option value="In Review" selected>In Review</option>';
+//  }
+//  else{
+//    $output2 .= '<option value="In Review">In Review</option>';
+//  }
+//  if(strcasecmp($status_cur['state'], 'Approved')==0){
+//    $output2 .= '<option value="Approved" selected>Approved</option>';
+//  }
+//  else{
+//    $output2 .= '<option value="Approved">Approved</option>';
+//  }
+//  if(strcasecmp($status_cur['state'], 'Rejected')==0){
+//    $output2 .= '<option value="Rejected" selected>Rejected</option>';
+//  }
+//  else{
+//    $output2 .= '<option value="Rejected">Rejected</option>';
+//  }
+//  if(strcasecmp($status_cur['state'], 'Closed')==0){
+//    $output2 .= '<option value="Closed" selected>Closed</option>';
+//  }
+//  else{
+//    $output2 .= '<option value="Closed">Closed</option>';
+//  }
+//  $output2 .= '</select><br/><br/>Notes<br/>
+//  <form method="post" class="pad-bottom"><textarea rows="4" cols="50" wrap="hard" id="adopt-notes"></textarea>';
+//
+//  //print out the saved notes
+//  $notes = get_adoption_notes_by_id($req_id);
+//  $storage = explode('[', $notes['notes']);
+// scope
+//  //$final;
+//  foreach($storage as $row){
+//    $output2 .= '<div id=adopt-notes-hist><p>['.$row.'</p></div>';
+//  }
+//
+//  //save button
+//  $output2.= '<button class="buton b_green-1 buton-1 buton-mini" effect="fade" style="float:left" type="submit">SAVE</button></form>';
+//
+//  $output2.= '</div></div></div></div>';
+//
+//  $commands = array();
+//  //$commands[] = ajax_command_replace('#active-adoptions', $outputx);
+// // $commands[] = ajax_command_prepend('#adopt-notes-hist', $notes);
+// // $commands[] = ajax_command_replace('#adopt-notes', $blank);
+// // $commands[] = ajax_command_replace('#available-adopt-apps', $new_choices);
+//  $commands[] = ajax_command_replace('#current-adoption-fieldset-wrapper', $output2);
+//
+//  //return array('#type' => 'ajax', '#commands' => $commands);
+//
+//  $page= array('#type' => 'ajax', '#commands' => $commands);
+//    ajax_deliver($page);
+//  }
+//  else {
+//    $output = t("Your browser must have javascript turn on in order to work properly.");
+//    return $output;
+//  }
+//}
+
+/**
+ *Called when the save button is pressed on the staff adoption review tab
+ *
+ */
+function animal_adoption_save_updates($adopt_id, $form, &$form_state) {
+  /*get the values to save*/
+
+
+  $state = $form_state['input']['application_status'];
+  $notes;
+  if (!empty($form_state['values']['foster_app_note'])) {
+    $notes = $form_state['values']['foster_app_note'];
+  }
+  // application id
+  $app = $form_state['values']['selected_foster_app'];
+
+  $success = update_foster_status($app, $state, $notes);
+}
+
+/**
+ *  ------------ANIMAL REQUEST FORM--------------------
+ * implements hook_entityform_insert
+ * Use this function to insert collected data into the animal request table
+ *
+ *
+ * */
+function animal_adoptions_entityform_insert($entityform) {
+
+  $details = array();
+  array_push($details, date('Y-m-d h:i:s'));
+  array_push($details, $entityform->field_caagory['und'][0]['tid']);
+  array_push($details, $entityform->field_age['und'][0]['value']);
+  // may be null
+  (isset($entityform->field_breed['und'][0]['tid'])) ? array_push($details, $entityform->field_breed['und'][0]['tid']) : array_push($details, NULL);
+  // may be null
+  (isset($entityform->field_dog_breed_find['und'][0]['tid'])) ? array_push($details, $entityform->field_dog_breed_find['und'][0]['tid']) : array_push($details, NULL);
+  (isset($entityform->field_hair_type['und'][0]['tid'])) ? array_push($details, $entityform->field_hair_type['und'][0]['tid']) : array_push($details, NULL);
+  (isset($entityform->field_size['und'][0]['tid'])) ? array_push($details, $entityform->field_size['und'][0]['tid']) : array_push($details, NULL);
+  array_push($details, $entityform->field_sexy['und'][0]['value']);
+  (isset($entityform->field_spayed_neutered['und'][0]['value'])) ? array_push($details, $entityform->field_spayed_neutered['und'][0]['value']) : array_push($details, NULL);
+  array_push($details, $entityform->field_name_find['und'][0]['value']);
+  array_push($details, $entityform->field_phone_find['und'][0]['value']);
+  array_push($details, $entityform->field_email_find['und'][0]['value']);
+
+  //send array to db for saving
+  insert_animal_search_request($details);
+}
+//--------------------------------------------------------
+
+/**
+ *Builds a contract based on the incoming contract_id
+ *Queries all the info it needs and builds a contract ready to print.
+ *
+ */
+function build_complete_adoption_contract($contact_id) {
+
+  /*get the animal details that you need*/
+
+
+  $pet = get_animal_details_for_contract($contact_id);
+
+  /*get the user details that you need*/
+
+
+  $candidate = get_user_details_for_contract($contact_id);
+
+  /*build the markup*/
+
+
+  $output = '<div class=adoption-print><h3>Clarenville SPCA</h3><p class=address><strong>Society for Prevention of Cruelty to Animals</strong><br/>125 Huntly Drive<br/>Clarenville, NL A5A 4L1<br/>TEl: (709) 466-3489  Fax: (709) 433-3080<br/>email:support@clarenvilleareaspca.ca</p>
+  <h4>Adoption Contract</h4>
+  <p>Congratulations on your new pet <strong>' . check_plain($pet['name']) . '<br /></strong>';
+  (strcasecmp($pet['microchip'], 'not registered') == 0) ? $output .= '' : 'Microchip #: <strong>' . check_plain($pet['microchip']) . '</strong><br/>';
+
+  if (!empty($pet['dewormed'])) {
+    $output .= 'Your ' . check_plain($pet['family']) . ' was dewormed on: ';
+    foreach ($pet['dewormed'] as $wm) {
+      $newtime = strtotime($wm);
+      $newformat = date('d-M-Y', $newtime);
+      $output .= '<strong>' . $newformat . ', </strong>';
+    }
+    $output .= '<br/>';
+  }
+
+  if (strcmp($pet['spayed'], 'unknown') == 1) {
+    $newtime = strtotime($pet['spayed']);
+    $sdate = date('d-M-Y', $newtime);
+    $output .= check_plain($pet['name']) . ' was Spay/Neutered on: <strong>' . check_plain($sdate) . '</strong><br/>';
+  }
+
+  if (!empty($pet['bordetella'])) {
+    $output .= 'Has received the Bordetella (Kennel Cough) vaccination on: ';
+    foreach ($pet['bordetella'] as $vacc) {
+      $newtime = strtotime($vacc);
+      $bdate = date('d-M-Y', $newtime);
+      $output .= '<strong>' . $bdate . ', </strong>';
+    }
+    $output .= '<br/>';
+  }
+  else {
+    $output .= '';
+  }
+
+  if (!empty($pet['rabies'])) {
+    $output .= 'Has received a Rabies shot on: ';
+    foreach ($pet['rabies'] as $rab) {
+      $newtime = strtotime($rab);
+      $rdate = date('d-M-Y', $newtime);
+      $output .= '<strong>' . $rdate . ', </strong>';
+    }
+    $output .= '<br/>';
+  }
+  else {
+    $output .= '';
+  }
+  if (strcasecmp($pet['family'], 'dog') == 0) {
+    if (!empty($pet['canine'])) {
+      $output .= 'Has received a Canine Distemper + Corona Virus shot on: ';
+      foreach ($pet['canine'] as $can) {
+        $dddate = strtotime($can);
+        $rdate = date('d-M-Y', $dddate);
+        $output .= '<strong>' . $rdate . ', </strong>';
+      }
+      $output .= '<br/>';
+    }
+  }
+  if (strcasecmp($pet['family'], 'cat') == 0) {
+    if (!empty($pet['feline'])) {
+      $output .= 'Has received a Feline Rhinotracheitis-Calici-Panleukopenia (FVRCP) shot on: ';
+      foreach ($pet['feline'] as $fel) {
+        $newtime = strtotime($fel);
+        $fvrcpdate = date('d-M-Y', $newtime);
+        $output .= '<strong>' . $fvrcpdate . ', </strong>';
+      }
+      $output .= '<br/>';
+    }
+    if (!empty($pet['combo']) && strcmp($pet['combo'], 'no data') == 1) {
+      $newtime = strtotime($pet['combo']);
+      $cdate = date('d-M-Y', $newtime);
+      $output .= 'Received COMBO testing on <strong>' . $cdate . '</strong> with a <strong>' . check_plain($pet['combo_result']) . ' </strong>result';
+    }
+  }
+
+  $output .= '</p>
+  <h4>Agreements</h4>
+  <p>I agree to treat my ' . check_plain($pet['family']) . ' humanely.</p>';
+  if (strcasecmp(check_plain($pet['spayed']), 'unknown') == 0) {
+    $output .= '<p>I agree to have my ' . check_plain($pet['family']) . ' SPAYED/NEUTERED by__________________________</p>';
+  }
+
+  $output .= '<p>I give permission for the Veterinary Clinic _________________________________________, to release information to the Clarenville SPCA, regarding the veterinary treatments provided of the ' . check_plain($pet['family']) . ' that I adopted from their shelter.</p>
+  <p>I agree that while waiting for my pet to be spayed, I will not accidentally or purposely allow this female ' . check_plain($pet['family']) . ' to become pregnant.  If pregnancy occurs, I understand that immediate spaying is necessary.</p>
+  <p>I agree that while waiting for my pet to be neutered, I will not accidentally or purposely allow this male ' . check_plain($pet['family']) . ' to impregnate another animal.</p>
+  <p>I agree that my ' . check_plain($pet['family']) . ' is to be a house pet and will not be kept outdoors for long periods of time.</p>
+  <p>I agree that I will not sell or give my ' . check_plain($pet['family']) . ' to another individual, rescue group, shelter or home unless I first get permission from the SPCA, (the ' . check_plain($pet['family']) . ' may be returned to us if problems arise).</p>
+  <p>I agree to deliver this ' . check_plain($pet['family']) . ' back to the Clarenville Area SPCA if I am unable to continue to provide a home.</p>
+  <p>I agree that I will not euthanize or destroy this ' . check_plain($pet['family']) . ' for any other reason except old age or serious illness.</p>
+  <p>I agree that this ' . check_plain($pet['family']) . ' will not be allowed to roam freely on any property other than my own.</p>
+  <p>I agree to review and abide by all provisions of the <em>Animal Health & Protection Act</em> as it pertains to ownership and care of my ' . check_plain($pet['family']) . '</p>
+  <p>In the event of violation of any of the above, I agree that the SPCA may repossess my ' . check_plain($pet['family']) . '</p>
+  <h4>Disclaimer</h4>
+  <p>The SPCA disclaims any responsibility for an animal or animals adopted from it.  The SPCA does not warrant and cannot warrant the health, fitness or temperament of the animal; and it makes no representations as to its health, fitness or temperament.  Should your Veterinarian determine that the animal is in poor health or that it is in need of treatment of any sort or that the destruction of the animal is required, the SPCA disclaims any responsibility to you for the health or the cost of the animal or the costs of any such treatment or destruction.  No warranties express or implied exist.</p>
+  <p>Adoption fees are refundable for 7 days.</p>
+  <p>I, <strong>' . check_plain($candidate['name']) . '</strong>, of <strong>' . check_plain($candidate['full_address']) . '</strong> the person adopting <strong>' . check_plain($pet['name']) . ' the ' . check_plain($pet['family']) . '</strong> from the SPCA, agree that I have been advised of the contents of this adoption policy, that I have signed the same and received a copy thereof, and I agree to be bound thereby.</p>
+  <p>Dated <strong>' . date('l, jS \of F Y \a\t h:i:s A') . '</strong></p>
+  <h5>Signed:___________________________________  Witnessed:______________________________________</h5>
+  <p class=tele-info>Telephone: <strong>' . check_plain($candidate['telephone']) . '</strong><br/>
+  Cell: <strong>' . check_plain($candidate['cell']) . '</strong><br/>
+  Email: <strong>' . check_plain($candidate['email']) . '</strong></div>';
+
+  $build = array(
+    'header_text' => array(
+      '#type' => 'markup',
+      '#markup' => $output,
+    ),
+  );
+
+  return $build;
+}
+
+/**
+ *USER ACTION
+ *Custom built function for URL content/adoption-form outlined in menu above
+ *It accepts the argument coming in at the end of the URL, (this is the only placed it is defined)
+ */
+function build_adoption_form($arg1) {
+
+  /**/
+  /*get the user id*/
+
+
+  global $user;
+  $thisid = $user->uid;
+
+  //CHECK TO SEE IF USER APPLIED TO ADOPT THIS ANIMAL BEFORE
+  $exists = check_for_previous_adopt_app($thisid, $arg1);
+
+  if (isset($exists->id)) {
+    drupal_set_message(t('You have already applied to adopt this animal.  The SPCA staff will contact you by email once they have reviewed your application.  Thank you for your paitence'), 'warning');
+    $just_seen = drupal_get_path_alias('node/' . $arg1);
+    drupal_goto($just_seen);
+  }
+  else {
+    /*get the name and animal family of the animal*/
+
+
+    $namefam = get_animal_name_and_family_by_id($arg1);
+    /*drop it into the form*/
+
+
+    $output = '<div>
+    <h2>When considering adopting an animal from the SPCA, the following <span>policies</span> must be adhered to:</h2>
+    <p><h4>You must be prepared to <span>pay a fee*</span>. Adoption Fees are as follows</h4>
+    <ul><li><span class=yellow-highlight>Dog Adoption Fees $75.00 for an intact/un-spayed dog or puppy</span></li>
+    <li><span class=yellow-highlight>Cat Adoption Fees $50.00 for an intact/un-spayed cat of kitten</span></li>
+    <li><span class=yellow-highlight>Dog Adoption Fees $175.00 for a spayed/neutered dog or puppy</span></li>
+    <li><span class=yellow-highlight>Cat Adoption Fees $125.00 for a spayed/neutered cat of kitten</span></li>
+    <li><span class=yellow-highlight>Vaccines Fees $ 10.00 for each Vaccine Given</span></li>
+    <li><span class=yellow-highlight>Deposits $ 75.00 when adopting a dog, $50.00 when adopting a cat.</span></li></ul> We require a refundable deposit on the spaying/neutering of dogs and cats. This deposit will be refunded, by cheque, once your pet has been spayed or neutered. We do require confirmation of this from your Veterinarian.
+    <br/>*All adoption fees include de worming of your pet.</p>
+    <p><h4>You must be prepared to <span>have your pet spayed or neutered</span> in required time frame.</h4>
+    <ul><li>If adopting an adult dog or cat, you will be given a 2 month time limit to have your adopted pet spayed or neutered.</li>
+    <li>If adopting a puppy or kitten, the adopted pet will need to be spayed or neutered when it had reached 6 months of age.</li>
+    </ul></p>
+    <p>All adopted pets must be house pets, and not living outside for extended periods of time.</p>
+    <p>You must understand that animals are a lifelong commitment that requires time and financial obligations.</p>
+    <p>We cannot guarantee the health or temperament of an adopted pet. Some pets may not be housebroken or received training of any sorts.</p>
+    <p>All adopted pets are not to be re homed, sold or given away by the owners. If you are not able to keep your pet, the Clarenville SPCA must be contacted and we will decide if another home is suitable, or if the pet should be returned to our SPCA. You are not allowed to leave your pet with another SPCA or Rescue Group; you are required to return the pet to the Clarenville SPCA.</p>
+    <p>After adoption of your pet is complete, the animal is the responsibility of the adopter. The SPCA, at any time, has the right to intervene if it is suspected that the animal is in any way being neglected, and/or abused. The SPCA reserves the right to remove the animal if the SPCA feels the animal is not being properly looked after. Also, the SPCA reserves the right to have access to any animal adopted, at any time.</p>
+    <p>Pets are not to be adopted out as gifts for others, unless special permission is granted.</p>
+    <p>We will need to speak to all adults in your household before we can approve your adoption application.</p>
+    <p>Permission from a landlord must be obtained. A letter may be required.</p>
+    <p>Adoption fees are refundable for 7 days from adoption date unless extended with approval by the Clarenville Area SPCA\'s Board of Directors.</p>
+    <p><h4>Disclaimer</h4>The SPCA disclaims any responsibility for an animal or animals adopted from it. The SPCA does not warrant and cannot warrant the health, fitness, or temperament of the animal; and it makes no representations as to its health, fitness or temperament. Should your Veterinarian determine that the animal is in poor health or that it is in need of treatment of any sort or that the destruction of the animal is required, the SPCA disclaims any responsibility to you for the health or costs of the animal or the costs of any such treatment or destruction. No warranties express or implied exist.</p>
+    <h2>You are applying to adopt <span>' . $namefam['name'] . '</span></h2></div>';
+    /*build the form*/
+
+
+    $build = array(
+      'header_text' => array(
+        '#type' => 'markup',
+        '#markup' => $output,
+      ),
+      'example_form' => drupal_get_form('animal_adoptions_data_collection', $arg1, $namefam['family']),
+    );
+    //return $build;
+  }
+
+  return $build;
+}
+
+/**
+ *
+ *This function is called by the build_adoption_form above.
+ *It is called when a user presses the "adopt me" button
+ *
+ */
+function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
+
+  /*get the user id*/
+
+
+  global $user;
+  $thisid = $user->uid;
+
+  /*check to see if this user has already filled out the form*/
+
+
+  /*of so, get the data and load the form*/
+
+
+  $prev_data = get_adoption_data_by_user_id($thisid);
+
+
+  $form['q'] = array(
+    '#type' => 'hidden',
+    // animal_id
+    '#value' => $arg1,
+  );
+  $form['q1'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Are you:'),
+    '#options' => array(
+      36 => t('Working'),
+      37 => t('Student'),
+      38 => t('Retired'),
+      43 => t('Other'),
+    ),
+    '#required' => TRUE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->home_state)) ? $prev_data->home_state : NULL,
+  );
+  $form['q2'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('What are your current living arrangements'),
+    '#options' => array(
+      39 => t('Home owner'),
+      40 => t('Renting'),
+      41 => t('Living with parents'),
+      42 => t('Other'),
+    ),
+    '#required' => TRUE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->living_arg)) ? $prev_data->living_arg : NULL,
+  );
+  $form['q3'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#title' => t('If renting, for how long have you been at your current location'),
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->renting)) ? $prev_data->renting : NULL,
+    '#states' => array(
+      'visible' => array(
+        // hide if rent is not checked
+        ':input[name=q2]' => array('value' => 40),
+      ),
+    ),
+  );
+  $form['q4'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#title' => t('Landlords name and number'),
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->landlord)) ? $prev_data->landlord : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if rent checked
+        ':input[name=q2]' => array('value' => 40),
+      ),
+    ),
+  );
+  $form['q5'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textarea',
+    '#title' => t('Name of other adults living in the home'),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->other_adults)) ? $prev_data->other_adults : NULL,
+  );
+  $form['q6'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#title' => t('Ages of any children'),
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#required' => FALSE,
+    '#description' => t('(Eg: 3, 6, 12, etc'),
+    '#default_value' => (isset($prev_data->child_age)) ? $prev_data->child_age : NULL,
+  );
+  $form['q7'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Have you owned pets in the past'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_pets)) ? $prev_data->past_pets : NULL,
+  );
+  $form['q8'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#title' => t('Breed and name of pet (Eg: Labrador Retriever - Jonsey)'),
+    '#required' => FALSE,
+    '#description' => t('(Eg: Labrador Retriver - Jonsey'),
+    '#default_value' => (isset($prev_data->past_breed)) ? $prev_data->past_breed : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if owned pets in the past
+        ':input[name=q7]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q9'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#title' => t('Age'),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_age)) ? $prev_data->past_age : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if owned pets in the past
+        ':input[name=q7]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q10'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Sex'),
+    '#options' => array(
+      1 => t('Male'),
+      2 => t('Female'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_sex)) ? $prev_data->past_sex : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show owned pets in the past
+        ':input[name=q7]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q11'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Spayed/Nutered'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_spayed)) ? $prev_data->past_spayed : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if owned pets in the past
+        ':input[name=q7]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q12'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#title' => t('Name of vet'),
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_vet)) ? $prev_data->past_vet : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if owned pets in the past
+        ':input[name=q7]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q13'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Still own'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_own)) ? $prev_data->past_own : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if owned pets in the past
+        ':input[name=q7]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q14'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textarea',
+    '#title' => t('If you do not still own a pet, please tell us where pet is now and reason (Eg: deceased, rehomed, etc)'),
+    '#required' => FALSE,
+    '#description' => t('(Eg: deceased, rehomed, etc)'),
+    '#default_value' => (isset($prev_data->past_not_own)) ? $prev_data->past_not_own : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if owned pets in the past
+        ':input[name=q7]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q15'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Do you have a current veterinarian'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => TRUE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->cur_vet)) ? $prev_data->cur_vet : NULL,
+  );
+  $form['q16'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#title' => t('Name of vet name and telephone number'),
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#required' => FALSE,
+    '#description' => t('Sunshine medical clinic - 709-555-3333'),
+    '#default_value' => (isset($prev_data->cur_vet_name)) ? $prev_data->cur_vet_name : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if rent checked
+        ':input[name=q15]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q17'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Have you ever adopted from a SPCA or rescue group in the past'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => TRUE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_adopt)) ? $prev_data->past_adopt : NULL,
+  );
+  $form['q18'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'textfield',
+    '#title' => t('Which branch'),
+    '#size' => 60,
+    '#maxlength' => 256,
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_branch)) ? $prev_data->past_branch : NULL,
+    '#states' => array(
+      'visible' => array(
+        // show if yes checked
+        ':input[name=q17]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['q19'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Have you or a member of your household ever had an animal confiscated or investigated by a member of the RCMP or SPCA'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => TRUE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->past_crime)) ? $prev_data->past_crime : NULL,
+  );
+  $form['animal-type'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Adopting cats & dogs'),
+    '#weight' => 1,
+  );
+  $form['animal-type']['q20'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Are you aware of the costs associated with pet ownership, spaying or nutering, and vet care'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => TRUE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->adopt_cost)) ? $prev_data->adopt_cost : NULL,
+  );
+  $form['animal-type']['q21'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Are you prepared to have your new pet spayed or nutered (if required) within the required time frame'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => TRUE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->adopt_spay)) ? $prev_data->adopt_spay : NULL,
+  );
+  $form['animal-type']['dog'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Adopting a Dog'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#weight' => 1,
+  );
+  $form['animal-type']['dog']['living'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Will this dog be living in your home'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->dog_live)) ? $prev_data->dog_live : NULL,
+  );
+  $form['animal-type']['dog']['train'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Are you prepared for behaviour training and house training'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->dog_train)) ? $prev_data->dog_train : NULL,
+  );
+  $form['animal-type']['dog']['run'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Do you have a fenced in yard or dog run'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->dog_run)) ? $prev_data->dog_run : NULL,
+  );
+  if (strcasecmp($atype, 'cat') == 0) {
+    $form['animal-type']['dog']['run']['#disabled'] = TRUE;
+    $form['animal-type']['dog']['train']['#disabled'] = TRUE;
+    $form['animal-type']['dog']['living']['#disabled'] = TRUE;
+    $form['animal-type']['dog']['#collapsed'] = TRUE;
+  }
+  $form['animal-type']['cat'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Adopting a Cat'),
+    '#weight' => 2,
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['animal-type']['cat']['house'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Will this cat be a house cat only'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->cat_house)) ? $prev_data->cat_house : NULL,
+  );
+  $form['animal-type']['cat']['outside'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Will this pet be allowed outside once spayed or nutered'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->cat_spayed)) ? $prev_data->cat_spayed : NULL,
+  );
+  $form['animal-type']['cat']['scratch'] = array(
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
+    '#type' => 'radios',
+    '#title' => t('Are you aware that cats may scratch furniture'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#required' => FALSE,
+    '#description' => t(''),
+    '#default_value' => (isset($prev_data->cat_scratch)) ? $prev_data->cat_scratch : NULL,
+  );
+  if (strcasecmp($atype, 'dog') == 0) {
+    $form['animal-type']['cat']['house']['#disabled'] = TRUE;
+    $form['animal-type']['cat']['outside']['#disabled'] = TRUE;
+    $form['animal-type']['cat']['scratch']['#disabled'] = TRUE;
+    $form['animal-type']['cat']['#collapsed'] = TRUE;
+  }
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+    '#weight' => 2,
+  );
+  return $form;
+}
+
+/**
+ *the submit handler for the form builder of the same name
+ *
+ */
+function animal_adoptions_data_collection_submit($form, &$form_state) {
+
+  /*get the user id*/
+
+
+  global $user;
+  $thisid = $user->uid;
+
+  /*get the id of the animal in question*/
+
+
+  $adopting = $form_state['values']['q'];
+
+  //CHECK FOR INSERT OR UPDATE
+  $previous_data = get_adoption_data_by_user_id($thisid);
+
+  if (!empty($previous_data)) {
+
+    /*register application*/
+
+
+    $query = db_insert('spca_adoption_applications')->fields(array('user_id', 'animal_id', 'approved', 'date_init', 'date_closed', 'notes',
+      ));
+
+    $query->values(array('user_id' => $thisid,
+        'animal_id' => $adopting,
+        'approved' => 'Waiting',
+        'date_init' => date('Y-m-d h:i:s'),
+        'date_closed' => NULL,
+        'notes' => NULL,
+      ));
+    /*insert the request into the database*/
+
+
+    $query->execute();
+
+    /*update user info*/
+
+
+    $querys = db_update('spca_adoption_application_data')->fields(array('user_id' => $thisid,
+        'home_state' => $form_state['values']['q1'],
+        'living_arg' => $form_state['values']['q2'],
+        'renting' => $form_state['values']['q3'],
+        'landlord' => $form_state['values']['q4'],
+        'other_adults' => $form_state['values']['q5'],
+        'child_age' => $form_state['values']['q6'],
+        'past_pets' => $form_state['values']['q7'],
+        'past_breed' => $form_state['values']['q8'],
+        'past_age' => $form_state['values']['q9'],
+        'past_sex' => $form_state['values']['q10'],
+        'past_spayed' => $form_state['values']['q11'],
+        'past_vet' => $form_state['values']['q12'],
+        'past_own' => $form_state['values']['q13'],
+        'past_not_own' => $form_state['values']['q14'],
+        'cur_vet' => $form_state['values']['q15'],
+        'cur_vet_name' => $form_state['values']['q16'],
+        'past_adopt' => $form_state['values']['q17'],
+        'past_branch' => $form_state['values']['q18'],
+        'past_crime' => $form_state['values']['q19'],
+        'adopt_cost' => $form_state['values']['q20'],
+        'adopt_spay' => $form_state['values']['q21'],
+        'dog_live' => $form_state['values']['living'],
+        'dog_train' => $form_state['values']['train'],
+        'dog_run' => $form_state['values']['run'],
+        'cat_house' => $form_state['values']['house'],
+        'cat_spayed' => $form_state['values']['outside'],
+        'cat_scratch' => $form_state['values']['scratch'],
+      ))->condition('user_id', check_plain($thisid), '=');
+    /*insert the request into the database*/
+
+
+    $querys->execute();
+  }
+  else {
+    //INSERT FOR A FIRST TIME
+    /*register the adoption application*/
+
+
+    $query = db_insert('spca_adoption_applications')->fields(array('user_id', 'animal_id', 'approved', 'date_init', 'date_closed', 'notes',
+      ));
+
+    $query->values(array('user_id' => $thisid,
+        'animal_id' => $adopting,
+        'approved' => 'Waiting',
+        'date_init' => date('Y-m-d h:i:s'),
+        'date_closed' => NULL,
+        'notes' => NULL,
+      ));
+    /*insert the request into the database*/
+
+
+    $query->execute();
+
+    /*register the adoption application data*/
+
+
+    $query2 = db_insert('spca_adoption_application_data')->fields(array('user_id', 'home_state', 'living_arg', 'renting', 'landlord', 'other_adults', 'child_age', 'past_pets', 'past_breed', 'past_age', 'past_sex', 'past_spayed', 'past_vet', 'past_own', 'past_not_own', 'cur_vet', 'cur_vet_name', 'past_adopt', 'past_branch', 'past_crime', 'adopt_cost', 'adopt_spay', 'dog_live', 'dog_train', 'dog_run', 'cat_house', 'cat_spayed', 'cat_scratch',
+      ));
+
+    $query2->values(array('user_id' => $thisid,
+        'home_state' => $form_state['values']['q1'],
+        'living_arg' => $form_state['values']['q2'],
+        'renting' => $form_state['values']['q3'],
+        'landlord' => $form_state['values']['q4'],
+        'other_adults' => $form_state['values']['q5'],
+        'child_age' => $form_state['values']['q6'],
+        'past_pets' => $form_state['values']['q7'],
+        'past_breed' => $form_state['values']['q8'],
+        'past_age' => $form_state['values']['q9'],
+        'past_sex' => $form_state['values']['q10'],
+        'past_spayed' => $form_state['values']['q11'],
+        'past_vet' => $form_state['values']['q12'],
+        'past_own' => $form_state['values']['q13'],
+        'past_not_own' => $form_state['values']['q14'],
+        'cur_vet' => $form_state['values']['q15'],
+        'cur_vet_name' => $form_state['values']['q16'],
+        'past_adopt' => $form_state['values']['q17'],
+        'past_branch' => $form_state['values']['q18'],
+        'past_crime' => $form_state['values']['q19'],
+        'adopt_cost' => $form_state['values']['q20'],
+        'adopt_spay' => $form_state['values']['q21'],
+        'dog_live' => $form_state['values']['living'],
+        'dog_train' => $form_state['values']['train'],
+        'dog_run' => $form_state['values']['run'],
+        'cat_house' => $form_state['values']['house'],
+        'cat_spayed' => $form_state['values']['outside'],
+        'cat_scratch' => $form_state['values']['scratch'],
+      ));
+    /*insert the request into the database*/
+
+
+    $query2->execute();
+    //END INSERT FOR THE FIRST TIME
+  }
+
+  /*Send email to user*/
+
+
+  $body = 'Thank you for your interest in adopting one of our shelter animals.  We have recevied your application and will be in contact with you shortly.';
+  $email = $user->mail;
+  $from = 'noreply@clarenvilleareaspca.com';
+  $params = array(
+    'subject' => t('SPCA Adoption Application Submission'),
+    'body' => check_markup($body, 'full_html'),
+  );
+  drupal_mail('animal_adoptions', 'adoption_application', $email, 'en', $params, $from);
+
+  /*send email to admin*/
+
+
+  $body = 'An adoption application has just been received.  Please log into the site to review this submission.';
+  $email = variable_get('site_mail', '');
+  $from = $user->mail;
+  $params = array(
+    'subject' => t('SPCA Adoption Application Submission'),
+    'body' => check_markup($body, 'full_html'),
+  );
+  drupal_mail('animal_adoptions', 'adoption_application', $email, 'en', $params, $from);
+
+  /*redirect*/
+
+
+  drupal_set_message(t('Thank you for your submission.  We will email you a status update once we review your applicaition.'), 'status');
+  $url = 'node/' . $adopting;
+  // send them
+  $form_state['redirect'] = $url;
+}
+
+/**
+ *Implements hook_mail
+ */
+function animal_adoptions_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'adoption_application':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+      break;
+
+    case 'foster_application':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+      break;
+  }
+}
+
+/**
+ *called by URL content/adoptions outlined in menu above.
+ *builds the adoption adminstration view approved users see to review all incomming applications.
+ */
+function build_adoption_review_form($form, &$form_state) {
+
+
+  /*get all the adoption applications*/
+
+
+  $applications = get_adoption_applications();
+  $row_holder = array();
+  /*build the output*/
+
+
+  // add in the rest
+  if ($applications) {
+    while ($row = $applications->fetchAssoc()) {
+      if (!isset($row['approved'])) {
+        $approval_state = 'Waiting';
+      }
+      else {
+        $approval_state = $row['approved'];
+      }
+      /*get the user name*/
+
+
+      $urse_name = get_username_by_id($row['user_id']);
+      /*get the animal name*/
+
+
+      $ansn_name = get_animal_name_by_id($row['animal_id']);
+      $nextinline = array($row['id'], check_plain($ansn_name->title), check_plain($urse_name->name), check_plain($approval_state), $row['date_init'], $row['date_closed']);
+      // collect the row data to display in jquery table
+      array_push($row_holder, $nextinline);
+    }
+  }
+
+  // Table settings.
+  $attributes['datatable_options'] = array(
+    'bFilter' => TRUE,
+    'bInfo' => TRUE,
+  );
+  // Define table columns
+  $header = array(
+    array(
+      'data' => t('ID'),
+      'datatable_options' => array(
+        'bSortable' => TRUE,
+        'bSearchable' => TRUE,
+      ),
+    ),
+    array(
+      'data' => t('Animal Name'),
+      'datatable_options' => array(
+        'bSortable' => TRUE,
+        'bSearchable' => TRUE,
+      ),
+    ),
+    array(
+      'data' => t('Username'),
+      'datatable_options' => array(
+        'bSortable' => TRUE,
+        'bSearchable' => TRUE,
+      ),
+    ),
+    array(
+      'data' => t('Status'),
+      'datatable_options' => array(
+        'bSortable' => TRUE,
+        'bSearchable' => TRUE,
+      ),
+    ),
+    array(
+      'data' => t('Date Opened'),
+      'datatable_options' => array(
+        'bSortable' => TRUE,
+        'bSearchable' => TRUE,
+      ),
+    ),
+    array(
+      'data' => t('Date Closed'),
+      'datatable_options' => array(
+        'bSortable' => TRUE,
+        'bSearchable' => TRUE,
+      ),
+    ),
+  );
+  // Table data.
+
+  // Render using Drupal's render API.
+  $form['datatable'] = array(
+    '#theme' => 'datatable',
+    '#prefix' => '<div id=active-adoptions>',
+    '#suffix' => '</div>',
+    '#header' => $header,
+    '#rows' => $row_holder,
+    '#attributes' => $attributes,
+  );
+
+  //-------------------
+  /*load the select list with whats in the adopt table*/
+
+
+  $available = get_all_adoption_ids();
+
+  //AJAX
+  $form['selected_adopt_app'] = array(
+    '#type' => 'select',
+    '#title' => t('Select Application To View'),
+    '#prefix' => '<div id=available-adopt-apps>',
+    '#suffix' => '</div>',
+    '#options' => drupal_map_assoc($available),
+    '#ajax' => array(
+      'wrapper' => 'questions-fieldset-wrapper',
+      'callback' => 'get_new_list_callback',
+      'effect' => 'fade',
+    ),
+  );
+
+  // This fieldset just serves as a container for the part of the form
+  // that gets rebuilt.
+  $form['questions_fieldset'] = array(
+    '#type' => 'fieldset',
+    // These provide the wrapper referred to in #ajax['wrapper'] above.
+    '#prefix' => '<div id="questions-fieldset-wrapper">',
+    '#suffix' => '</div>',
+  );
+
+  //---------
+  if (!empty($form_state['values']['selected_adopt_app'])) {
+
+    $form['questions_fieldset']['question'] = array(
+      '#markup' => t('No Data'),
+    );
+    /*$questions_type will hold the ID of the application in question*/
+
+    $question_type = $form_state['values']['selected_adopt_app'];
+
+    /*build the tabs that all the content will get loaded in*/
+
+
+    $output2 = '<div class="tabs-classic"><h3>Application <span>Details</span></h3>' . '<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#home2">ANIMAL</a></li>
+	<li><a data-toggle="tab" href="#tabone">USER</a></li>
+	<li><a data-toggle="tab" href="#tabtwo">APPLICATION</a></li>
+    </ul>';
+
+    /*get the details for the first record*/
+
+
+    $first = get_animal_details_from_adopt_app($question_type);
+    if (!$first) {
+      $first['name'] = 'no data';
+      $first['status'] == 'no data';
+      $first['animal_status'] == 'no data';
+      $first['spayed'] == 'no data';
+      $first['url'] = 'no data';
+    }
+
+    $output2 .= '<div class="tab-content"><div class="tab-pane active" id="home2"><img class="pull-left" src=' . file_create_url($first['image']) . ' width="100px"/>
+<p><strong>Name: </strong>' . l(t($first['name']), $first['url'], array('attributes' => array('target' => '_blank'), 'options' => array('relative' => TRUE))) . '</p>
+<p><strong>Status: </strong>' . $first['status'] . '</p>';
+    $pad = ($first['spayed'] ? 'YES' : 'NO');
+    $output2 .= '<p><strong>Spayed/Neutered:</strong> ' . $pad . '</p></div>';
+
+
+    /*get the user detals of the application*/
+
+
+    /*$applicant holds username, email*/
+
+
+    $applicant = get_user_from_adopt_app($question_type);
+    if (!$applicant) {
+      $applicant['name'] = 'no data';
+      $applicant['email'] = 'no data';
+      $applicant['fullname'] = 'no data';
+      $applicant['full_mailing_address'] = 'no data';
+      $applicant['ppic'] = 'no data';
+      $applicant['contact_number'] = 'no data';
+      $applicant['cell_number'] = 'no data';
+    }
+    $output2 .= '<div class="tab-pane" id="tabone"><img class="pull-left" src=' . file_create_url($applicant['ppic']) . ' width=100px/>
+  <p><strong>Username:</strong> ' . l(t($applicant['name']), '/users/' . seoUrl($applicant['name']), array('attributes' => array('target' => '_blank'), 'options' => array('relative' => TRUE))) . '</p>
+  <p><strong>Full Name:</strong> ' . $applicant['fullname'] . '</p>
+  <p><strong>Email:</strong> ' . $applicant['email'] . '</p>
+  <p><strong>Mailing Address:</strong> ' . $applicant['full_mailing_address'] . '</p>
+  <p><strong>Home Number: </strong>' . $applicant['contact_number'] . '</p>
+  <p><strong>Cell Number: </strong>' . $applicant['cell_number'] . '</p></div>';
+
+    /*get the application that was filled*/
+
+
+    /*$app is an object item*/
+
+
+    $app = get_adoption_application_details($applicant['uid']);
+
+    /*transpose living arrangements and home state to readablke form*/
+
+
+    $home = get_applicant_home_state_vocab($app->home_state);
+    $live = get_applicant_living_conditions_vocab($app->living_arg);
+
+
+    $newtime = strtotime($applicant['date_init']);
+    $didate = date('d-M-Y', $newtime);
+    $output2 .= '<div class="tab-pane" id="tabtwo">
+  <p><strong>Date Initinated: </strong> ' . $didate . '</p>
+  <p><strong>Home Enviroment:</strong> ' . $home->name . '</p>
+  <p><strong>Living Arrangements:</strong> ' . $live->name . '</p>';
+    if ($app->renting) {
+      $output2 .= '<p><strong>Renting for:</strong> ' . $app->renting . ' </p>';
+    }
+    else {
+      $output2 .= '<p><strong>Renting for:</strong> no data</p>';
+    }
+    if ($app->landlord) {
+      $output2 .= '<p><strong>Landlords name and number:</strong> ' . $app->landlord . '</p>';
+    }
+    else {
+      $output2 .= '<p><strong>Landlords name and number:</strong> no data</p>';
+    }
+    if ($app->other_adults) {
+      $output2 .= '<p><strong>Other adults livining in the home:</strong> ' . $app->other_adults . '</p>';
+    }
+    else {
+      $output2 .= '<p><strong>Other adults livining in the home:</strong> no data</p>';
+    }
+    if ($app->child_age) {
+      $output2 .= '<p><strong>Ages of children: </strong>' . $app->child_age . '</p>';
+    }
+    else {
+      $output2 .= '';
+    }
+    //past pet here
+    if ($app->past_branch == 1) {
+      $output2 .= '<p><strong>Adopted in the past: </strong>' . $app->past_adopt . '  <strong>form: </strong>' . $app->past_branch . '</p>';
+    }
+    else {
+      $output2 .= '<p><strong>Adopted in the past: </strong>NO';
+    }
+    if ($app->past_crime == 1) {
+      $output2 .= '<p><strong>Past crime history: YES</strong></p>';
+    }
+    else {
+      $output2 .= '<p><strong>Past crime history:</strong> NO</p>';
+    }
+    if ($app->adopt_cost == 1) {
+      $output2 .= '<p><strong>Aware of animal cost:</strong> YES</p>';
+    }
+    else {
+      $output2 .= '<p><strong>Aware of animal cost:</strong> NO</p>';
+    }
+    if ($app->adopt_spay == 1) {
+      $output2 .= '<p><strong>Are you prepared to spay/neuter your pet:</strong> YES</p>';
+    }
+    else {
+      $output2 .= '<p><strong>Are you prepared to spay/neuter your pet:</strong> NO</p>';
+    }
+    if (isset($app->dog_live)) {
+      if ($app->dog_live == 1) {
+        $output2 .= '<p><strong>Will dog live in home:</strong> YES</p>';
+      }
+      else {
+        $output2 .= '<p><strong>Will dog live in home:</strong> NO</p>';
+      }
+    }
+    if (isset($app->dog_train)) {
+      if ($app->dog_train == 1) {
+        $output2 .= '<p><strong>Will you train and house train:</strong> YES</p>';
+      }
+      else {
+        $output2 .= '<p><strong>Will you train and house train:</strong> NO</p>';
+      }
+    }
+    if (isset($app->dog_run)) {
+      if ($app->dog_run == 1) {
+        $output2 .= '<p><strong>Have yard or dog run: </strong>YES</p>';
+      }
+      else {
+        $output2 .= '<p><strong>Have yard or dog run: </strong>NO</p>';
+      }
+    }
+    if (isset($app->cat_house)) {
+      if ($app->cat_house == 1) {
+        $output2 .= '<p><strong>Will this be house cat only: </strong>YES</p>';
+      }
+      else {
+        $output2 .= '<p><strong>Will this be house cat only: </strong>NO</p>';
+      }
+    }
+    if (isset($app->cat_spayed)) {
+      if ($app->cat_spayed == 1) {
+        $output2 .= '<p><strong>Will cat be allowed outside after spayed/neutered: </strong>YES</p>';
+      }
+      else {
+        $output2 .= '<p><strong>Will cat be allowed outside after spayed/neutered: </strong>NO</p>';
+      }
+    }
+    if (isset($app->cat_scratch)) {
+      if ($app->cat_scratch == 1) {
+        $output2 .= '<p><strong>Do you know cats scratch furniture: </strong>YES</p>';
+      }
+      else {
+        $output2 .= '<p><strong>Do you know cats scratch furniture: </strong>NO</p>';
+      }
+    }
+    if ($app->past_pets == 1) {
+      $output2 .= '<p><h3>Past/Present Pet Information</h3><strong>Past Pets: </strong>YES</p>';
+    }
+    else {
+      $output2 .= '<p><h3>Past/Present Pet Information</h3><strong>Past Pets:</strong>NO</p>';
+    }
+    if ($app->past_pets == 1) {
+      $output2 .= '<p><strong>Breed and name: </strong>' . $app->past_breed . '  <br/><strong>Age: </strong>' . $app->past_age . '  <br/><strong>Sex: </strong>' . ($app->past_sex == 1 ? 'MALE' : 'FEMALE') . '  <br/><strong>Spayed/Neutered:</strong> ' . ($app->past_spayed == 1 ? 'YES' : 'NO') . '  <br/><strong>Name of vet:</strong> ' . $app->past_vet . ' <br/><strong>Still own:</strong> ' . ($app->past_own == 1 ? 'YES' : 'NO') . '</p>';
+    }
+
+    if ($app->past_not_own) {
+      $output2 .= '<p><strong>Pet is now: </strong>' . $app->past_not_own . '</p>';
+    }
+
+    if ($app->cur_vet_name == 1) {
+      $output2 .= '<p><strong>Current vet:</strong> YES  <strong>Name:</strong> ' . $app->cur_vet_name . '</p></div></div></div>';
+    }
+
+    /*get the application status for the selected animal*/
+
+
+    $status_cur = get_adoption_status_by_id($form_state['input']['selected_adopt_app']);
+    $form['questions_fieldset']['question'] = array(
+      '#type' => 'markup',
+      '#markup' => $output2,
+    );
+
+    //submit button for edible details
+    $form['questions_fieldset']['saver1'] = array(
+      '#prefix' => '<div class="buton b_green-1 buton-1 buton-mini">',
+      '#suffix' => '</div>',
+      //'#target' => 'blank',
+      '#type' => 'link',
+      '#href' => '/contract/adoption-contract/' . check_plain($question_type) . '',
+      '#title' => t('PREVIEW CONTRACT'),
+      '#attributes' => array('target' => 'blank',
+      ),
+    );
+
+    /*get animal adoption status taxonomy terms for the select list*/
+
+
+    $vocab = get_taxanomy_vocab_child_by_id(15);
+
+    //if a selection was made, display dropdown list of adoption application status
+    $form['questions_fieldset']['application_status'] = array(
+      '#type' => 'select',
+      '#title' => t('Assign Status'),
+      '#options' => drupal_map_assoc($vocab),
+      '#value' => $status_cur['state'],
+      '#prefix' => '<div id="selector">',
+      '#suffix' => '</div>',
+    );
+    $form['questions_fieldset']['adopt_app_note'] = array(
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#type' => 'textarea',
+      '#title' => t('Notes'),
+      '#required' => FALSE,
+      '#description' => t(''),
+      '#default_value' => t(''),
+      '#id' => 'adopt-notes',
+    );
+    //print out the saved notes
+    $notes = get_adoption_notes_by_id($question_type);
+    $storage = explode('[', $notes['notes']);
+    // scope
+    $final = '';
+    foreach ($storage as $row) {
+      $final .= '<div id=adopt-notes-hist><p>[' . $row . '</p></div>';
+    }
+
+    $form['questions_fieldset']['adopt_app_note_hist'] = array(
+      '#type' => 'markup',
+      //$outputnot,
+      '#markup' => $final,
+    );
+    //submit button for edible details
+    $form['questions_fieldset']['saver'] = array(
+      '#type' => 'submit',
+      '#value' => t('Save'),
+      '#ajax' => array(
+        'wrapper' => 'active-adoptions',
+        'callback' => 'refresh_adoption_review_table',
+        'effect' => 'fade',
+      ),
+    );
+  }
+  return $form;
+}
+
+/**
+ *util function
+ */
+function seoUrl($string) {
+  //Lower case everything
+  $string = strtolower($string);
+  //Make alphanumeric (removes all other characters)
+  $string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
+  //Clean up multiple dashes or whitespaces
+  $string = preg_replace("/[\s-]+/", " ", $string);
+  //Convert whitespaces and underscore to dash
+  $string = preg_replace("/[\s_]/", "-", $string);
+  return $string;
+}
+
+//function build_adoption_review_form_submit($form, &$form_state){
+//
+//    /*get the animal details that you need*/
+//  $pet = get_animal_details_for_contract($form_state['input']['selected_adopt_app']);
+//
+//  /*get the user details that you need*/
+//  $candidate = get_user_details_for_contract($form_state['input']['selected_adopt_app']);
+//
+//  /*build the markup*/
+//  $output = '<div class=adoption-print><h3>Clarenville SPCA</h3><p class=address><strong>Society for Prevention of Cruelty to Animals</strong><br/>125 Huntly Drive<br/>Clarenville, NL A5A 4L1<br/>TEl: (709) 466-3489  Fax: (709) 433-3080<br/>email:support@clarenvilleareaspca.ca</p>
+//  <h4>Adoption Contract</h4>
+//  <p>Congratulations on your new pet <strong>'.check_plain($pet['name']).'<br /></strong>';
+//  (strcasecmp($pet['microchip'], 'not registered')==0) ? $output .= '' : 'Microchip #: <strong>'.check_plain($pet['microchip']).'</strong><br/>';
+//
+//  if(!empty($pet['dewormed'])){
+//    $output .= 'Your '.check_plain($pet['family']).' was dewormed on: ';
+//    foreach($pet['dewormed'] as $wm){
+//      $newtime = strtotime($wm);
+//      $newformat = date('d-M-Y', $newtime);
+//      $output .= '<strong>'.$newformat.', </strong>';
+//    }
+//    $output .= '<br/>';
+//  }
+//
+//  if(strcmp($pet['spayed'], 'unknown')==1){
+//    $newtime = strtotime($pet['spayed']);
+//    $sdate = date('d-M-Y', $newtime);
+//    $output .= check_plain($pet['name']).' was Spay/Neutered on: <strong>'.check_plain($sdate).'</strong><br/>';
+//  }
+//
+//  if(!empty($pet['bordetella'])){
+//    $output .= 'Has received the Bordetella (Kennel Cough) vaccination on: ';
+//    foreach($pet['bordetella'] as $vacc){
+//      $newtime = strtotime($vacc);
+//      $bdate = date('d-M-Y', $newtime);
+//      $output .= '<strong>'.$bdate.', </strong>';
+//    }
+//    $output .= '<br/>';
+//  }
+//  else{
+//    $output .= '';
+//  }
+//
+//  if(!empty($pet['rabies'])){
+//    $output .= 'Has received a Rabies shot on: ';
+//    foreach($pet['rabies'] as $rab){
+//      $newtime = strtotime($rab);
+//      $rdate = date('d-M-Y', $newtime);
+//      $output .= '<strong>'.$rdate.', </strong>';
+//    }
+//    $output .= '<br/>';
+//  }
+//  else{
+//    $output .= '';
+//  }
+//  if(strcasecmp($pet['family'], 'dog')==0){
+//    if(!empty($pet['canine'])){
+//      $output .= 'Has received a Canine Distemper + Corona Virus shot on: ';
+//      foreach($pet['canine'] as $can){
+//        $dddate = strtotime($can);
+//        $rdate = date('d-M-Y', $dddate);
+//        $output .= '<strong>'.$rdate.', </strong>';
+//      }
+//      $output .= '<br/>';
+//    }
+//  }
+//  if(strcasecmp($pet['family'], 'cat')==0){
+//    if(!empty($pet['feline'])){
+//      $output .= 'Has received a Feline Rhinotracheitis-Calici-Panleukopenia (FVRCP) shot on: ';
+//      foreach($pet['feline'] as $fel){
+//        $newtime = strtotime($fel);
+//        $fvrcpdate = date('d-M-Y', $newtime);
+//        $output .= '<strong>'.$fvrcpdate.', </strong>';
+//      }
+//      $output .= '<br/>';
+//    }
+//    if(!empty($pet['combo']) && strcmp($pet['combo'], 'no data')==1){
+//      $newtime = strtotime($pet['combo']);
+//      $cdate = date('d-M-Y', $newtime);
+//      $output .= 'Received COMBO testing on <strong>'.$cdate.'</strong> with a <strong>'.check_plain($pet['combo_result']).' </strong>result';
+//    }
+//  }
+//
+//  $output .= '</p>
+//  <h4>Agreements</h4>
+//  <p>I agree to treat my '.check_plain($pet['family']).' humanely.</p>';
+//  if(strcasecmp(check_plain($pet['spayed']), 'unknown')==0){
+//    $output .='<p>I agree to have my '.check_plain($pet['family']).' SPAYED/NEUTERED by__________________________</p>';
+//  }
+//
+//  $output .= '<p>I give permission for the Veterinary Clinic _________________________________________, to release information to the Clarenville SPCA, regarding the veterinary treatments provided of the '.check_plain($pet['family']).' that I adopted from their shelter.</p>
+//  <p>I agree that while waiting for my pet to be spayed, I will not accidentally or purposely allow this female '.check_plain($pet['family']).' to become pregnant.  If pregnancy occurs, I understand that immediate spaying is necessary.</p>
+//  <p>I agree that while waiting for my pet to be neutered, I will not accidentally or purposely allow this male '.check_plain($pet['family']).' to impregnate another animal.</p>
+//  <p>I agree that my '.check_plain($pet['family']).' is to be a house pet and will not be kept outdoors for long periods of time.</p>
+//  <p>I agree that I will not sell or give my '.check_plain($pet['family']).' to another individual, rescue group, shelter or home unless I first get permission from the SPCA, (the '.check_plain($pet['family']). ' may be returned to us if problems arise).</p>
+//  <p>I agree to deliver this '.check_plain($pet['family']).' back to the Clarenville Area SPCA if I am unable to continue to provide a home.</p>
+//  <p>I agree that I will not euthanize or destroy this '.check_plain($pet['family']).' for any other reason except old age or serious illness.</p>
+//  <p>I agree that this '.check_plain($pet['family']).' will not be allowed to roam freely on any property other than my own.</p>
+//  <p>I agree to review and abide by all provisions of the <em>Animal Health & Protection Act</em> as it pertains to ownership and care of my '.check_plain($pet['family']).'</p>
+//  <p>In the event of violation of any of the above, I agree that the SPCA may repossess my '.check_plain($pet['family']).'</p>
+//  <h4>Disclaimer</h4>
+//  <p>The SPCA disclaims any responsibility for an animal or animals adopted from it.  The SPCA does not warrant and cannot warrant the health, fitness or temperament of the animal; and it makes no representations as to its health, fitness or temperament.  Should your Veterinarian determine that the animal is in poor health or that it is in need of treatment of any sort or that the destruction of the animal is required, the SPCA disclaims any responsibility to you for the health or the cost of the animal or the costs of any such treatment or destruction.  No warranties express or implied exist.</p>
+//  <p>Adoption fees are refundable for 7 days.</p>
+//  <p>I, <strong>'.check_plain($candidate['name']).'</strong>, of <strong>'.check_plain($candidate['full_address']).'</strong> the person adopting <strong>'.check_plain($pet['name']).' the '.check_plain($pet['family']).'</strong> from the SPCA, agree that I have been advised of the contents of this adoption policy, that I have signed the same and received a copy thereof, and I agree to be bound thereby.</p>
+//  <p>Dated <strong>'.date('l, jS \of F Y \a\t h:i:s A').'</strong></p>
+//  <h5>Signed:___________________________________  Witnessed:______________________________________</h5>
+//  <p class=tele-info>Telephone: <strong>'.check_plain($candidate['telephone']).'</strong><br/>
+//  Cell: <strong>'.check_plain($candidate['cell']).'</strong><br/>
+//  Email: <strong>'.check_plain($candidate['email']).'</strong></div>';
+//
+//  $build = array(
+//
+//      'header_text' => array(
+//        '#type' => 'markup',
+//        '#markup' => $output,
+//      ),
+//    );
+//
+// return $build;
+//}
+
+/**
+ *Updates any changes that was made to the adoption application status
+ *
+ */
+function refresh_adoption_review_table($form, &$form_state) {
+
+  /*get the values to save*/
+
+
+  $state = $form_state['input']['application_status'];
+  $notes = '';
+  if (!empty($form_state['values']['adopt_app_note'])) {
+    $notes = $form_state['values']['adopt_app_note'];
+  }
+  // application id
+  $app = $form_state['values']['selected_adopt_app'];
+
+  $success = update_adoption_status($app, $state, $notes);
+
+  $blank = '<textarea class="form-control form-textarea" id="adopt-notes" name="adopt_app_note" cols="60" rows="5"></textarea>';
+
+  $commands = array();
+  $commands[] = ajax_command_prepend('#adopt-notes-hist', $notes);
+  $commands[] = ajax_command_replace('#adopt-notes', $blank);
+
+  return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
+ *Updates any changes that was made to the adoption application status
+ *
+ */
+function refresh_foster_review_table($form, &$form_state) {
+
+  /*get the values to save*/
+
+
+  $state = $form_state['input']['application_status'];
+  $notes = '';
+  if (!empty($form_state['values']['foster_app_note'])) {
+    $notes = $form_state['values']['foster_app_note'];
+  }
+  // application id
+  $app = $form_state['values']['selected_foster_app'];
+
+  $success = update_foster_status($app, $state, $notes);
+
+  $blank = '<textarea class="form-control form-textarea" id="foster-notes" name="foster_app_note" cols="60" rows="5"></textarea>';
+
+  $commands = array();
+  $commands[] = ajax_command_prepend('#foster-notes-hist', $notes);
+  $commands[] = ajax_command_replace('#foster-notes', $blank);
+
+  return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
+ *AJAX function that gets called from the dropdown list that has this action attached to it
+ *
+ */
+function get_new_list_callback($form, $form_state) {
+  return $form['questions_fieldset'];
+}
+
+
+/*--------------DATABASE FUNCTIONS-----------------------*/
+
+/**
+ *Database call for getting all the info from the spca adoption table
+ *for all cases except those marked 'closed'
+ *
+ */
+function get_adoption_applications() {
+
+  //->condition('a.approved', 'Closed', '!=')
+  $hold = db_select('spca_adoption_applications', 'a')->fields('a');
+  $cur_state = $hold->execute();
+
+  return $cur_state;
+}
+
+/**
+ *checks to see if a user has submitted an adoption application before.
+ *If so, return the data.  If not, return NULL
+ *
+ */
+function get_adoption_data_by_user_id($thisid) {
+
+  $hold = db_select('spca_adoption_application_data', 'a')->condition('a.user_id', $thisid, '=')->fields('a');
+  $cur_state = $hold->execute();
+
+  // in scope
+  $use = array();
+  foreach ($cur_state as $rec) {
+    $use = $rec;
+  }
+  /*return the user array*/
+
+
+  return $use;
+}
+
+/**
+ *Database call for getting all the info from the spca foster table
+ *
+ */
+function get_foster_applications() {
+
+  //->condition('a.approved', 'Closed', '!=')
+  $hold = db_select('spca_foster_applications', 'a')->fields('a');
+  $cur_state = $hold->execute();
+
+  return $cur_state;
+}
+
+/**
+ *takes a user_id and animal_id
+ *returns the spca_adoption_applications id
+ *
+ *
+ */
+function check_for_previous_adopt_app($thisid, $adopting) {
+
+  $hold = db_select('spca_adoption_applications', 'a')->condition('a.user_id', $thisid, '=')->condition('a.animal_id', $adopting, '=')->fields('a', array('id'));
+  $cur_state = $hold->execute();
+
+  // in scope
+  $use = array();
+  foreach ($cur_state as $rec) {
+    $use = $rec;
+  }
+  /*return the user object*/
+
+
+  return $use;
+}
+
+/**
+ *updates the notes and approved status of the adoption application
+ *returns the number of rows updated
+ *
+ */
+function update_adoption_status($app, $state, $notes) {
+  // scope.
+  $closed = NULL;
+
+  /*add date/time stamp to new notes*/
+
+
+  if ($notes != NULL) {
+    // long format
+    $processed = '[' . date('l jS \of F Y h:i:s A') . ']';
+    // add time to notes
+    $processed .= $notes;
+    /*get the notes that were previously saved*/
+
+
+    $oldnotes = get_adoption_notes_by_id($app);
+    /*add the new notes to them and pass for saving*/
+
+
+    $processed .= $oldnotes['notes'];
+
+    /*check to see if closed or not*/
+
+
+    if (strcasecmp($state, 'closed') == 0) {
+      $closed = date('Y-m-d h:i:s');
+    }
+    /*update the adoption table with notes*/
+
+
+    $gtg = db_update('spca_adoption_applications')->fields(array(
+        'approved' => check_plain($state),
+        'notes' => check_plain($processed),
+        'date_closed' => $closed,
+      ))->condition('id', check_plain($app), '=');
+    $gtg->execute();
+  }
+  else {
+    /*check to see if closed or not*/
+
+
+    if (strcasecmp($state, 'closed') == 0) {
+      $closed = date('Y-m-d h:i:s');
+    }
+    /*update the foster table with w/o notes*/
+
+
+    $gtg = db_update('spca_adoption_applications')->fields(array(
+        'approved' => check_plain($state),
+        'date_closed' => $closed,
+      ))->condition('id', check_plain($app), '=');
+    $gtg->execute();
+  }
+  return $gtg;
+}
+
+/**
+ *inserts new animal search request into table
+ *based on the array $arr values
+ *
+ *
+ */
+function insert_animal_search_request($arr) {
+
+  /*update the adoption table*/
+
+
+  $gtg = db_insert('spca_animal_request')->fields(array(
+      'date_submitted' => $arr[0],
+      'category' => check_plain($arr[1]),
+      'age' => check_plain($arr[2]),
+      // null
+      'cat_breed' => check_plain($arr[3]),
+      // null
+      'dog_breed' => check_plain($arr[4]),
+      // null
+      'hair_type' => check_plain($arr[5]),
+      // null
+      'size' => check_plain($arr[6]),
+      'sex' => check_plain($arr[7]),
+      // null
+      'spayed_neutered' => check_plain($arr[8]),
+      'applicant_name' => check_plain($arr[9]),
+      'applicant_number' => check_plain($arr[10]),
+      'applicant_email' => check_plain($arr[11]),
+      'matched' => check_plain(0),
+      'date_matched' => NULL,
+      'animal_match_id' => NULL,
+      'request_status' => 'Waiting',
+    ));
+  $gtg->execute();
+
+  return $gtg;
+}
+
+/**
+ *updates the notes and approved status of the foster application
+ *returns the number of rows updated
+ *
+ */
+function update_foster_status($app, $state, $notes) {
+  // scope.
+  $closed = NULL;
+
+  /*add date/time stamp to new notes*/
+
+
+  if ($notes != NULL) {
+    // long format
+    $processed = '[' . date('l jS \of F Y h:i:s A') . ']';
+    // add time to notes
+    $processed .= $notes;
+    /*get the notes that were previously saved*/
+
+
+    $oldnotes = get_foster_notes_by_id($app);
+    /*add the new notes to them and pass for saving*/
+
+
+    $processed .= $oldnotes['notes'];
+    /*check to see if closed or not*/
+
+
+    if (strcasecmp($state, 'closed') == 0) {
+      $closed = date('Y-m-d h:i:s');
+    }
+
+    /*update the adoption table with notes*/
+
+
+    $gtg = db_update('spca_foster_applications')->fields(array(
+        'approved' => check_plain($state),
+        'date_closed' => $closed,
+        'notes' => check_plain($processed),
+      ))->condition('id', check_plain($app), '=');
+    $gtg->execute();
+  }
+  else {
+    /*check to see if closed or not*/
+
+
+    if (strcasecmp($state, 'closed') == 0) {
+      $closed = date('Y-m-d h:i:s');
+    }
+    /*update the adoption table with no notes*/
+
+
+    $gtg = db_update('spca_foster_applications')->fields(array(
+        'approved' => check_plain($state),
+        'date_closed' => $closed,
+      ))->condition('id', check_plain($app), '=');
+    $gtg->execute();
+  }
+  return $gtg;
+}
+
+/**
+ *Standard utility function
+ */
+function get_all_adoption_ids() {
+
+  $userid = db_select('spca_adoption_applications', 'a')->fields('a', array('id'));
+  //->condition('a.approved', 'Closed', '!=');
+  $sql = $userid->execute();
+
+  // in scope
+  $uidid = array();
+
+  foreach ($sql as $record) {
+    array_push($uidid, $record->id);
+  }
+  if(empty($uidid)){
+    array_push($uidid, 'No Applications to View');
+  }
+  return $uidid;
+}
+
+/**
+ *Standard utility function
+ */
+function get_all_foster_ids() {
+
+  $userid = db_select('spca_foster_applications', 'a')->fields('a', array('id'));
+  $sql = $userid->execute();
+
+  // in scope
+  $uidid = array();
+  array_push($uidid, 'Choose Application');
+  foreach ($sql as $record) {
+    array_push($uidid, $record->id);
+  }
+  return $uidid;
+}
+
+/**
+ *returns all info in the spca_animal_request table
+ *is called from the animal_request_match.inc file
+ */
+function get_all_animal_requests() {
+
+  $result = db_select('spca_animal_request', 'ar')->fields('ar');
+  $all = $result->execute();
+
+  // in scope
+  $all_ann = array();
+  foreach ($all as $record) {
+    array_push($all_ann, $record);
+  }
+  return $all_ann;
+}
+
+/**
+ *based on the id of the adoption application
+ *returns an array with the application 'state'
+ *
+ */
+function get_adoption_status_by_id($id_in) {
+
+  $hold = db_select('spca_adoption_applications', 'a')->condition('a.id', $id_in, '=')->fields('a', array('approved'));
+  $cur_state = $hold->execute();
+
+  // in scope
+  $use = array();
+  foreach ($cur_state as $rec) {
+    $use['state'] = $rec->approved;
+  }
+  /*return the user array*/
+
+
+  return $use;
+}
+
+/**
+ *based on the id of the foster application
+ *returns an array with the application 'state'
+ *
+ */
+function get_foster_status_by_id($id_in) {
+
+  $hold = db_select('spca_foster_applications', 'a')->condition('a.id', $id_in, '=')->fields('a', array('approved'));
+  $cur_state = $hold->execute();
+
+  // in scope
+  $use = array();
+  foreach ($cur_state as $rec) {
+    $use['state'] = $rec->approved;
+  }
+  /*return the user array*/
+
+
+  return $use;
+}
+
+/**
+ *returns array ['notes'], containg the history of notes for that application
+ */
+function get_adoption_notes_by_id($app) {
+  $hold = db_select('spca_adoption_applications', 'a')->condition('a.id', $app, '=')->fields('a', array('notes'));
+  $cur_state = $hold->execute();
+
+  // in scope
+  $use = array();
+  foreach ($cur_state as $rec) {
+    $use['notes'] = $rec->notes;
+  }
+  /*return the user array*/
+
+
+  return $use;
+}
+
+/**
+ *returns array ['notes'], containg the history of notes for that application
+ */
+function get_foster_notes_by_id($app) {
+  $hold = db_select('spca_foster_applications', 'a')->condition('a.id', $app, '=')->fields('a', array('notes'));
+  $cur_state = $hold->execute();
+
+  // in scope
+  $use = array();
+  foreach ($cur_state as $rec) {
+    $use['notes'] = $rec->notes;
+  }
+  /*return the user array*/
+
+
+  return $use;
+}
+
+/**
+ *
+ *Getting all user detials based on adoption application id
+ *
+ */
+function get_user_from_adopt_app($app_id) {
+
+  /*look up the user ID from the adopt table*/
+
+
+  $userid = db_select('spca_adoption_applications', 'a')->condition('a.id', $app_id, '=')->fields('a', array('user_id', 'date_init'));
+  $sql = $userid->execute();
+
+  // in scope
+  $uidid;
+  $date_init;
+  foreach ($sql as $record) {
+    $uidid = $record->user_id;
+    $date_init = $record->date_init;
+  }
+  /*look up the user from the user table*/
+
+
+  $applicantq = db_select('users', 'u')->condition('u.uid', $uidid, '=')->fields('u', array('name', 'mail'));
+  $result = $applicantq->execute();
+
+  /*get profile 2 name*/
+
+
+  $query = db_select('field_data_field_full_name', 'ffn');
+  $query->join('profile', 'p', 'ffn.entity_id = p.pid AND p.uid = :uid', array(':uid' => $uidid));
+  $query->fields('ffn', array('field_full_name_value'))->condition('ffn.entity_type', 'profile2');
+  $full = $query->execute();
+  $fullname;
+  foreach ($full as $row) {
+    $fullname = $row->field_full_name_value;
+  }
+
+  /*get profile2 picture*/
+
+
+  $query = db_select('users', 'u')->condition('u.uid', $uidid)->fields('u', array('picture'));
+  $hanging = $query->execute();
+  $picid;
+  foreach ($hanging as $ss) {
+    $picid = $ss->picture;
+  }
+  $query2 = db_select('file_managed', 'ffm')->condition('ffm.fid', $picid, '=')->fields('ffm', array('uri'));
+  $store = $query2->execute();
+  $real = '';
+  foreach ($store as $xx) {
+    $real = $xx->uri;
+  }
+
+  /*get profile2 home number*/
+
+
+  $query = db_select('profile', 'pf')->condition('pf.uid', $uidid)->fields('pf', array('pid'));
+  $hold = $query->execute();
+  $pid;
+  foreach ($hold as $sss) {
+    $pid = $sss->pid;
+  }
+  $query2 = db_select('field_data_field_home_phone_number', 'hn')->condition('hn.entity_id', $pid, '=')->fields('hn', array('field_home_phone_number_value'));
+  $stores = $query2->execute();
+  $contact;
+  foreach ($stores as $xxl) {
+    $contact = $xxl->field_home_phone_number_value;
+  }
+
+  /*get the cell number*/
+
+
+  $query2 = db_select('field_data_field_cell_number', 'cn')->condition('cn.entity_id', $pid, '=')->fields('cn', array('field_cell_number_value'));
+  $stores = $query2->execute();
+  $cell = '';
+  foreach ($stores as $xxl) {
+    $cell = $xxl->field_cell_number_value;
+  }
+
+
+  /*get profile2 full mailing address*/
+
+
+  $query2 = db_select('field_data_field_full_mailing_address', 'fma')->condition('fma.entity_id', $pid, '=')->fields('fma', array('field_full_mailing_address_value'));
+  $stores = $query2->execute();
+  $mailing_address;
+  foreach ($stores as $xxl) {
+    $mailing_address = $xxl->field_full_mailing_address_value;
+  }
+
+  // in scope
+  $use = array();
+  $use['ppic'] = $real;
+  foreach ($result as $rec) {
+    $use['name'] = $rec->name;
+    $use['email'] = $rec->mail;
+  }
+  $use['fullname'] = $fullname;
+  $use['full_mailing_address'] = $mailing_address;
+  $use['contact_number'] = $contact;
+  $use['cell_number'] = $cell;
+  $use['uid'] = $uidid;
+  $use['date_init'] = $date_init;
+  /*return the user array*/
+
+
+  return $use;
+}
+
+/**
+ *
+ *Getting animal detials based on adoption application id
+ *returns $animal array(animal_image, animal_name, animal_status)
+ *
+ */
+function get_animal_details_from_adopt_app($app_id) {
+
+
+  /*look up the animal ID from the adopt table*/
+
+
+  $userid = db_select('spca_adoption_applications', 'b')->condition('b.id', $app_id, '=')->fields('b', array('animal_id'));
+  $anid = $userid->execute();
+  $store = $anid->fetch();
+  $animal_id = $store->animal_id;
+
+  /*look up the animal image*/
+
+
+  $aimg = db_select('field_data_field_image', 'i')->condition('i.entity_id', $animal_id, '=')->fields('i', array('field_image_fid'));
+  $fid = $aimg->execute();
+  $x = $fid->fetch();
+  $image_fid = $x->field_image_fid;
+
+  $uri = db_select('file_managed', 'f')->condition('f.fid', $image_fid, '=')->fields('f', array('uri'));
+  $annpic = $uri->execute();
+  $y = $annpic->fetch();
+  $animal_image = $y->uri;
+
+  /*look up the name*/
+
+
+  $nida = db_select('node', 'n')->condition('n.nid', $animal_id, '=')->fields('n', array('title'));
+  $animalname = $nida->execute();
+  $z = $animalname->fetch();
+  $animal_name = $z->title;
+
+  /*look up status*/
+
+
+  $ptid = db_select('field_data_field_status_p', 'fp')->condition('fp.entity_id', $animal_id, '=')->fields('fp', array('field_status_p_tid'));
+  $status_pid = $ptid->execute();
+  $d = $status_pid->fetch();
+  $animal_statusid = $d->field_status_p_tid;
+
+  $ptid = db_select('taxonomy_term_data', 'tt')->condition('tt.tid', $animal_statusid, '=')->fields('tt', array('name'));
+  $statusf = $ptid->execute();
+  $d = $statusf->fetch();
+  $animal_status = $d->name;
+
+  /*look up his spayed/nutered status*/
+
+
+  $sn = db_select('field_data_field_spayed_nutered_p', 'sn')->condition('sn.entity_id', $animal_id, '=')->fields('sn', array('field_spayed_nutered_p_value'));
+  $spayed = $sn->execute();
+  $g = $spayed->fetch();
+  $animal_sn = $g->field_spayed_nutered_p_value;
+
+  /*get the relative path of the selected animal*/
+
+
+  $url = 'node/' . $animal_id;
+
+  /*load up the array*/
+
+
+  $animal = array('image' => $animal_image, 'name' => $animal_name, 'status' => $animal_status, 'spayed' => $animal_sn, 'url' => $url);
+
+  /*return the annimal array*/
+
+
+  return $animal;
+}
+
+/**
+ *
+ *Getting animal detials based on foster application id
+ *returns $animal array(animal_image, animal_name, animal_status)
+ *
+ */
+function get_animal_details_from_foster_app($app_id) {
+
+
+  /*look up the animal ID from the adopt table*/
+
+
+  $userid = db_select('spca_foster_applications', 'b')->condition('b.id', $app_id, '=')->fields('b', array('animal_id'));
+  $anid = $userid->execute();
+  $store = $anid->fetch();
+  $animal_id = $store->animal_id;
+
+  /*look up the animal image*/
+
+
+  $aimg = db_select('field_data_field_image', 'i')->condition('i.entity_id', $animal_id, '=')->fields('i', array('field_image_fid'));
+  $fid = $aimg->execute();
+  $x = $fid->fetch();
+  $image_fid = $x->field_image_fid;
+
+  $uri = db_select('file_managed', 'f')->condition('f.fid', $image_fid, '=')->fields('f', array('uri'));
+  $annpic = $uri->execute();
+  $y = $annpic->fetch();
+  $animal_image = $y->uri;
+
+  /*look up the name*/
+
+
+  $nida = db_select('node', 'n')->condition('n.nid', $animal_id, '=')->fields('n', array('title'));
+  $animalname = $nida->execute();
+  $z = $animalname->fetch();
+  $animal_name = $z->title;
+
+  /*look up status*/
+
+
+  $ptid = db_select('field_data_field_status_p', 'fp')->condition('fp.entity_id', $animal_id, '=')->fields('fp', array('field_status_p_tid'));
+  $status_pid = $ptid->execute();
+  $d = $status_pid->fetch();
+  $animal_statusid = $d->field_status_p_tid;
+
+  $ptid = db_select('taxonomy_term_data', 'tt')->condition('tt.tid', $animal_statusid, '=')->fields('tt', array('name'));
+  $statusf = $ptid->execute();
+  $d = $statusf->fetch();
+  $animal_status = $d->name;
+
+  /*look up his spayed/nutered status*/
+
+
+  $sn = db_select('field_data_field_spayed_nutered_p', 'sn')->condition('sn.entity_id', $animal_id, '=')->fields('sn', array('field_spayed_nutered_p_value'));
+  $spayed = $sn->execute();
+  $g = $spayed->fetch();
+  $animal_sn = $g->field_spayed_nutered_p_value;
+
+  /*get the relative path of the selected animal*/
+
+
+  $url = 'node/' . $animal_id;
+
+  /*load up the array*/
+
+
+  $animal = array('image' => $animal_image, 'name' => $animal_name, 'status' => $animal_status, 'spayed' => $animal_sn, 'url' => $url);
+
+  /*return the annimal array*/
+
+
+  return $animal;
+}
+
+/**
+ *Takes the spca_adoption_applications primary key as an argument
+ *Finds the animal ID at that entry
+ *Returns an array of animal information needed for a contract
+ *
+ */
+function get_animal_details_for_contract($contract_id) {
+
+  /*look up the animal ID from the adopt table*/
+
+
+  $userid = db_select('spca_adoption_applications', 'b')->condition('b.id', $contract_id, '=')->fields('b', array('animal_id'));
+  $anid = $userid->execute();
+  $store = $anid->fetch();
+  $animal_id = $store->animal_id;
+
+  /*look up the name*/
+
+
+  $nida = db_select('node', 'n')->condition('n.nid', $animal_id, '=')->fields('n', array('title'));
+  $animalname = $nida->execute();
+  $z = $animalname->fetch();
+  $animal_name = $z->title;
+
+  /*look up animal Family*/
+
+
+  $ptid = db_select('field_data_field_animal_family', 'fp')->condition('fp.entity_id', $animal_id, '=')->fields('fp', array('field_animal_family_tid'));
+  $status_pid = $ptid->execute();
+  $d = $status_pid->fetch();
+  $animal_statusid = $d->field_animal_family_tid;
+
+  $ptid = db_select('taxonomy_term_data', 'tt')->condition('tt.tid', $animal_statusid, '=')->fields('tt', array('name'));
+  $statusf = $ptid->execute();
+  $d = $statusf->fetch();
+  $animal_family = $d->name;
+
+  /*get microchip number*/
+
+
+  // scope
+  $animal_microchip;
+  $nida = db_select('field_data_field_microchip_number_p', 'mn')->condition('mn.entity_id', $animal_id, '=')->fields('mn', array('field_microchip_number_p_value'));
+  $animalchip = $nida->execute();
+  $z = $animalchip->fetch();
+  (!empty($z->field_microchip_number_p_value)) ? $animal_microchip = check_plain($z->field_microchip_number_p_value) : $animal_microchip = 'not registered';
+
+  /*get dewormed data*/
+
+
+  // scope
+  $animal_deworm_date;
+  $nida = db_select('field_data_field_deworm_date_p', 'nn')->condition('nn.entity_id', $animal_id, '=')->fields('nn', array('field_deworm_date_p_value'));
+  $deworm = $nida->execute();
+  $animal_deworm_date = array();
+  if (!empty($deworm)) {
+    foreach ($deworm as $record) {
+      array_push($animal_deworm_date, $record->field_deworm_date_p_value);
+    }
+  }
+  else {
+    array_push($animal_deworm_date, 'no data');
+  }
+
+  /*get Bordetella info*/
+
+
+  $result = db_select('field_data_field_bordetella_last_received', 'bl')->condition('bl.entity_id', $animal_id, '=')->fields('bl', array('field_bordetella_last_received_value'));
+  $all = $result->execute();
+
+  // in scope
+  $all_bor = array();
+  if (!empty($all)) {
+    foreach ($all as $record) {
+      /*get all the dates*/
+
+
+      array_push($all_bor, $record->field_bordetella_last_received_value);
+    }
+  }
+  else {
+    array_push($all_bor, 'no data');
+  }
+
+  /*get Rabies info*/
+
+
+  $result = db_select('field_data_field_rabies_received_date', 'rab')->condition('rab.entity_id', $animal_id, '=')->fields('rab', array('field_rabies_received_date_value'));
+  $all = $result->execute();
+
+  // in scope
+  $all_rab = array();
+  if (!empty($all)) {
+    foreach ($all as $record) {
+      /*get all the dates*/
+
+
+      array_push($all_rab, $record->field_rabies_received_date_value);
+    }
+  }
+  else {
+    array_push($all_rab, 'no data');
+  }
+
+  /*get FVRCP info*/
+
+
+  $result = db_select('field_data_field_fvrcp_received_date', 'fel')->condition('fel.entity_id', $animal_id, '=')->fields('fel', array('field_fvrcp_received_date_value'));
+  $all = $result->execute();
+
+  // in scope
+  $all_fel = array();
+  if (!empty($all)) {
+    foreach ($all as $record) {
+      /*get all the dates*/
+
+
+      array_push($all_fel, $record->field_fvrcp_received_date_value);
+    }
+  }
+  else {
+    array_push($all_fel, 'no data');
+  }
+
+  /*get Canaine Distemper info*/
+
+
+  $result = db_select('field_data_field_canine_distemper_received_', 'cd')->condition('cd.entity_id', $animal_id, '=')->fields('cd', array('field_canine_distemper_received__value'));
+  $all = $result->execute();
+
+  // in scope
+  $all_cd = array();
+  if (!empty($all)) {
+    foreach ($all as $record) {
+      /*get all the dates*/
+
+
+      array_push($all_cd, $record->field_canine_distemper_received__value);
+    }
+  }
+  else {
+    array_push($all_cd, 'no data');
+  }
+
+  /*get COMBO info*/
+
+
+  // scope
+  $combo;
+  $nida = db_select('field_data_field_combo_received', 'cr')->condition('cr.entity_id', $animal_id, '=')->fields('cr', array('field_combo_received_value'));
+  $animalchip = $nida->execute();
+  $z = $animalchip->fetch();
+  (!empty($z->field_combo_received_value)) ? $combo = check_plain($z->field_combo_received_value) : $combo = 'no data';
+
+  /*get COMBO result*/
+
+
+  // scope
+  $combo_res = '';
+  $nida = db_select('field_data_field_combo_result', 'ccr')->condition('ccr.entity_id', $animal_id, '=')->fields('ccr', array('field_combo_result_value'));
+  $animalchipr = $nida->execute();
+  $zr = $animalchipr->fetch();
+  if (isset($zr->field_combo_result_value)) {
+    if ($zr->field_combo_result_value == 0) {
+      $combo_res = 'Negitive';
+    }
+    else {
+      $combo_res = 'Positive';
+    }
+  }
+
+
+  /*get the spay neutered info*/
+
+
+  // scope
+  $spayed_neu;
+  $nida = db_select('field_data_field_spayed_nutered_date_p', 'mn')->condition('mn.entity_id', $animal_id, '=')->fields('mn', array('field_spayed_nutered_date_p_value'));
+  $res = $nida->execute();
+  $z = $res->fetch();
+  (!empty($z->field_spayed_nutered_date_p_value)) ? $spayed_neu = $z->field_spayed_nutered_date_p_value : $spayed_neu = 'unknown';
+
+  /*load up the array*/
+
+
+  $animal = array('name' => $animal_name, 'family' => $animal_family, 'microchip' => $animal_microchip, 'dewormed' => $animal_deworm_date, 'bordetella' => $all_bor, 'spayed' => $spayed_neu, 'rabies' => $all_rab, 'feline' => $all_fel, 'canine' => $all_cd, 'combo' => $combo, 'combo_result' => $combo_res);
+
+  /*return the annimal array*/
+
+
+  return $animal;
+}
+
+/**
+ *Takes spca_adoption_applications PK for argumant
+ *Gets the user_id associated with that entry
+ *returns an array of user information
+ *
+ */
+function get_user_details_for_contract($contact_id) {
+
+  /*look up the user ID from the adopt table*/
+
+
+  $userid = db_select('spca_adoption_applications', 'b')->condition('b.id', $contact_id, '=')->fields('b', array('user_id'));
+  $anid = $userid->execute();
+  $store = $anid->fetch();
+  $user_id = $store->user_id;
+
+  /*Get the username, email address*/
+
+
+  $base = db_select('users', 's')->condition('s.uid', $user_id, '=')->fields('s', array('name', 'mail'));
+  $name = $base->execute();
+  // scope
+  $username;
+  $email;
+  foreach ($name as $row) {
+    $username = $row->name;
+    $email = $row->mail;
+  }
+
+  /*got to profile to get pid*/
+
+
+  $prof = db_select('profile', 'pl')->condition('pl.uid', $user_id, '=')->fields('pl', array('pid'));
+  $anid = $prof->execute();
+  $store = $anid->fetch();
+  $user_pid = $store->pid;
+
+  /*get full name*/
+
+
+  $userfn = db_select('field_data_field_full_name', 'ff')->condition('ff.entity_id', $user_pid, '=')->fields('ff', array('field_full_name_value'));
+  $anid = $userfn->execute();
+  $store = $anid->fetch();
+  $user_full_name = $store->field_full_name_value;
+
+  /*get mailing address*/
+
+
+  $userma = db_select('field_data_field_full_mailing_address', 'ma')->condition('ma.entity_id', $user_pid, '=')->fields('ma', array('field_full_mailing_address_value'));
+  $anid = $userma->execute();
+  $store = $anid->fetch();
+  $user_mailing_address = $store->field_full_mailing_address_value;
+
+  /*get telephone number*/
+
+
+  $userpn = db_select('field_data_field_home_phone_number', 'hn')->condition('hn.entity_id', $user_pid, '=')->fields('hn', array('field_home_phone_number_value'));
+  $anid = $userpn->execute();
+  $store = $anid->fetch();
+  $user_home_number = $store->field_home_phone_number_value;
+
+  /*get cell number*/
+
+
+  // scope
+  $user_cell_number;
+  $userpn = db_select('field_data_field_cell_number', 'cn')->condition('cn.entity_id', $user_pid, '=')->fields('cn', array('field_cell_number_value'));
+  $anid = $userpn->execute();
+  $store = $anid->fetch();
+  (!empty($store->field_cell_number_value)) ? $user_cell_number = $store->field_cell_number_value : $user_cell_number = 'not provided';
+
+  /*load up the array*/
+
+
+  $user_result = array('name' => $user_full_name, 'full_address' => $user_mailing_address, 'telephone' => $user_home_number, 'cell' => $user_cell_number, 'email' => $email);
+
+  /*return the annimal array*/
+
+
+  return $user_result;
+}
+
+/**
+ *
+ *Getting animal detials based on id
+ *returns $animals_id array(animal_age, animal_size, animal_hair, animal_sex, image, name, status, spayed, url)
+ *is called in animal_request_match.inc
+ *
+ */
+function get_animal_details_by_id($animals_id) {
+
+
+  /*look up the animal cat breed*/
+
+
+  $anbr = db_select('field_data_field_cat_breed', 'cb')->condition('cb.entity_id', $animals_id, '=')->fields('cb', array('field_cat_breed_tid'));
+  $anb = $anbr->execute();
+  //if(!empty($anb)){
+  $stores = $anb->fetch();
+  if (isset($stores->field_cat_breed_tid)) {
+    $animal_breed = $stores->field_cat_breed_tid;
+  }
+  /*look up the animal dog breed*/
+
+
+  $andbr = db_select('field_data_field_dog_breed', 'db')->condition('db.entity_id', $animals_id, '=')->fields('db', array('field_dog_breed_tid'));
+  $andb = $andbr->execute();
+  //if(!empty($andb)){
+  $stores = $andb->fetch();
+  if (isset($stores->field_dog_breed_tid)) {
+    $animal_breed = $stores->field_dog_breed_tid;
+  }
+
+  /*look up the animal age*/
+
+
+  $annid = db_select('field_data_field_age_p', 'a')->condition('a.entity_id', $animals_id, '=')->fields('a', array('field_age_p_value'));
+  $anage = $annid->execute();
+  $store = $anage->fetch();
+  $animal_age = $store->field_age_p_value;
+
+  /*look up the animal size*/
+
+
+  $aimg = db_select('field_data_field_animal_size_p', 's')->condition('s.entity_id', $animals_id, '=')->fields('s', array('field_animal_size_p_tid'));
+  $fid = $aimg->execute();
+  $x = $fid->fetch();
+  $animal_size = $x->field_animal_size_p_tid;
+
+  /*look up the animal hair type*/
+
+
+  $aht = db_select('field_data_field_hair_type_p', 'ht')->condition('ht.entity_id', $animals_id, '=')->fields('ht', array('field_hair_type_p_tid'));
+  $ptid = $aht->execute();
+  $j = $ptid->fetch();
+  $animal_hair = $j->field_hair_type_p_tid;
+
+  /*look up the animal sex*/
+
+
+  $aage = db_select('field_data_field_sex_p', 'ag')->condition('ag.entity_id', $animals_id, '=')->fields('ag', array('field_sex_p_value'));
+  $fpv = $aage->execute();
+  $s = $fpv->fetch();
+  $animal_sex = $s->field_sex_p_value;
+
+  /*look up the animal spayed/neutered status*/
+
+
+  $spn = db_select('field_data_field_spayed_nutered_p', 'sn')->condition('sn.entity_id', $animals_id, '=')->fields('sn', array('field_spayed_nutered_p_value'));
+  $fsn = $spn->execute();
+  $snn = $fsn->fetch();
+  $animal_spne = $snn->field_spayed_nutered_p_value;
+
+  /*look up the name*/
+
+
+  $nida = db_select('node', 'n')->condition('n.nid', $animals_id, '=')->fields('n', array('title'));
+  $animalname = $nida->execute();
+  $z = $animalname->fetch();
+  $animal_name = $z->title;
+
+  /*look up status*/
+
+
+  $ptid = db_select('field_data_field_status_p', 'fp')->condition('fp.entity_id', $animals_id, '=')->fields('fp', array('field_status_p_tid'));
+  $status_pid = $ptid->execute();
+  $d = $status_pid->fetch();
+  $animal_statusid = $d->field_status_p_tid;
+
+  $ptid = db_select('taxonomy_term_data', 'tt')->condition('tt.tid', $animal_statusid, '=')->fields('tt', array('name'));
+  $statusf = $ptid->execute();
+  $d = $statusf->fetch();
+  $animal_status = $d->name;
+
+  /*get the relative path of the selected animal*/
+
+
+  $url = 'node/' . $animals_id;
+
+  /*load up the array*/
+
+
+  $animal = array('breed' => $animal_breed, 'animal_age' => $animal_age, 'animal_size' => $animal_size, 'animal_hair' => $animal_hair, 'animal_sex' => $animal_sex, 'name' => $animal_name, 'status' => $animal_status, 'spayed' => $animal_spne, 'url' => $url);
+
+  /*return the annimal array*/
+
+
+  return $animal;
+}
+
+/**
+ *Get the animal name based on the animal id
+ *returns a string of the animal name
+ */
+function get_animal_name_by_id($ann_id) {
+
+  $base = db_select('node', 'xc')->condition('xc.nid', $ann_id, '=')->fields('xc', array('title'));
+  $name = $base->execute();
+  // scope
+  $annname;
+  foreach ($name as $row) {
+    $annname = $row;
+  }
+  return $annname;
+}
+
+/**
+ *Get the animal name and family type based on the animal id
+ *returns an array of class objects ['name'],['title']
+ */
+function get_animal_name_and_family_by_id($ann_id) {
+
+  /*get the name*/
+
+
+  $base = db_select('node', 'xc')->fields('xc', array('title'))->condition('xc.nid', $ann_id, '=')->addTag('node_access');
+  $name = $base->execute();
+  // holds the name
+  $aname;
+  foreach ($name as $row) {
+    $aname = $row->title;
+  }
+
+  /*get the animal family*/
+
+
+  $query = db_select('taxonomy_term_data', 'td');
+  $query->join('field_data_field_animal_family', 'ca', 'td.tid = ca.field_animal_family_tid AND ca.entity_id = :aid', array(':aid' => $ann_id));
+  $query->fields('td', array('name'));
+  $newresult = $query->execute();
+  $annf;
+  foreach ($newresult as $row) {
+    $annf = $row->name;
+  }
+
+  $result = array();
+  $result['name'] = $aname;
+  $result['family'] = $annf;
+
+
+  return $result;
+}
+
+/**
+ *Get the username based on the user id
+ *returns a string of the username
+ */
+function get_username_by_id($use_id) {
+  $base = db_select('users', 's')->condition('s.uid', $use_id, '=')->fields('s', array('name'));
+  $name = $base->execute();
+  // scope
+  $usname;
+  foreach ($name as $row) {
+    $usname = $row;
+  }
+
+  return $usname;
+}
+
+/**
+ *get the readable version of the provided index
+ *
+ */
+function get_applicant_home_state_vocab($index) {
+
+  $base = db_select('taxonomy_term_data', 't')->condition('t.tid', $index, '=')->fields('t', array('name'));
+  $name = $base->execute();
+  // scope
+  $lname;
+  foreach ($name as $row) {
+    $lname = $row;
+  }
+
+  return $lname;
+}
+
+function get_applicant_living_conditions_vocab($lindex) {
+  $base = db_select('taxonomy_term_data', 't')->condition('t.tid', $lindex, '=')->fields('t', array('name'));
+  $name = $base->execute();
+  // scope
+  $ldname;
+  foreach ($name as $row) {
+    $ldname = $row;
+  }
+
+  return $ldname;
+}
+
+/**
+ *
+ *Getting adoption application detials based on user id
+ *
+ */
+function get_adoption_application_details($useid) {
+
+  /*look up the animal ID from the adopt table*/
+
+
+  $ptid = db_select('spca_adoption_application_data', 'saa')->condition('saa.user_id', $useid, '=')->fields('saa');
+  $statusf = $ptid->execute();
+  // scope
+  $appdetail;
+  foreach ($statusf as $row) {
+    $appdetail = $row;
+  }
+
+  /*return the object*/
+
+
+  return $appdetail;
+}
+
+/**
+ *utility function
+ *
+ */
+function get_taxanomy_vocab_by_id($id) {
+
+  $base = db_select('taxonomy_term_data', 't')->condition('t.tid', $id, '=')->fields('t', array('name'));
+  $name = $base->execute();
+  // scope
+  $lname;
+  foreach ($name as $row) {
+    $lname = $row;
+  }
+  return $lname;
+}
+
+/**
+ *utility function
+ *
+ */
+function get_taxanomy_vocab_child_by_id($id) {
+
+  $base = db_select('taxonomy_term_data', 't')->condition('t.vid', $id, '=')->fields('t', array('name'));
+  $name = $base->execute();
+  // scope
+  $lname = array();
+  foreach ($name as $row) {
+    array_push($lname, $row->name);
+  }
+  return $lname;
+}
+
