@@ -1041,6 +1041,7 @@ background: #0cadbe;
 }
 
 /* Background */
+.paws-background{background-image: url(/sites/default/files/paw-prints/paws-background.png);}
 .asset-bg{background: #0cadbe;}
 .white {
 	background: #fff;
@@ -1809,6 +1810,9 @@ color:#707070;
 .services-1:hover .holder {
 	background: #fff;
 	color: #0cadbe;
+}
+.services-1:hover a{
+    color: #76b737;
 }
 .services-2 {
 	padding: 0 15px 0 15px;

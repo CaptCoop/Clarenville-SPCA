@@ -207,19 +207,6 @@ function build_foster_data_collection_form($form, &$form_state, $arg) {
     '#description' => t('This can be an issue with animals that have mobility issues'),
     '#default_value' => (isset($prev_data->house_w_stairs)) ? $prev_data->house_w_stairs : NULL,
   );
-  $form['planned-pregnancy'] = array(
-    '#prefix' => '<div>',
-    '#suffix' => '</div>',
-    '#type' => 'radios',
-    '#title' => t('Are there any pregnancies, or planned pregnancies in the Home'),
-    '#options' => array(
-      'yes' => t('Yes'),
-      'no' => t('No'),
-    ),
-    '#required' => TRUE,
-    '#description' => t('This can be health issues with fostering some sick cats'),
-    '#default_value' => (isset($prev_data->planned_pregnancy)) ? $prev_data->planned_pregnancy : NULL,
-  );
   $form['seperate-room'] = array(
     '#prefix' => '<div>',
     '#suffix' => '</div>',
