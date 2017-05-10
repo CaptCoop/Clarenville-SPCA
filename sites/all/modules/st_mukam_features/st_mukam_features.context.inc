@@ -640,6 +640,124 @@ function st_mukam_features_context_default_contexts() {
   
     $context->condition_mode = 0;
 
+    
+    
+    // Translatables
+  // Included for use with string extractors like potx.
+  t('blogs');
+  $export['fundraising'] = $context;
+
+  $context = new stdClass();
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'fundraising';
+  $context->description = '';
+  $context->tag = 'blogs';
+  $context->conditions = array(
+    'path' => array(
+      'values' => array(
+        'blog-categories/fundraising' => 'blog-categories/fundraising',
+        'fundraising/*' => 'fundraising/*',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'search-form' => array(
+          'module' => 'search',
+          'delta' => 'form',
+          'region' => 'sidebar_second',
+          'weight' => '-10',
+        ),
+        'views-categories-block_2' => array(
+          'module' => 'views',
+          'delta' => 'categories-block_2',
+          'region' => 'sidebar_second',
+          'weight' => '-9',
+        ),
+        'views-blog-block_2' => array(
+          'module' => 'views',
+          'delta' => 'blog-block_2',
+          'region' => 'sidebar_second',
+          'weight' => '-8',
+        ),
+        'block-6' => array(
+          'module' => 'block',
+          'delta' => '6',
+          'region' => 'sidebar_second',
+          'weight' => '-6',
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('blogs');
+  $export['fundraising-bbb'] = $context;
+
+  $context = new stdClass();
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'blog_detail';
+  $context->description = '';
+  $context->tag = 'blogs';
+  $context->conditions = array(
+    'node' => array(
+      'values' => array(
+        'fundraising' => 'fundraising',
+      ),
+      'options' => array(
+        'node_form' => '1',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'search-form' => array(
+          'module' => 'search',
+          'delta' => 'form',
+          'region' => 'sidebar_second',
+          'weight' => '-10',
+        ),
+        'views-categories-block_2' => array(
+          'module' => 'views',
+          'delta' => 'categories-block_2',
+          'region' => 'sidebar_second',
+          'weight' => '-9',
+        ),
+        'views-blog-block_2' => array(
+          'module' => 'views',
+          'delta' => 'blog-block_2',
+          'region' => 'sidebar_second',
+          'weight' => '-8',
+        ),
+        'block-6' => array(
+          'module' => 'block',
+          'delta' => '6',
+          'region' => 'sidebar_second',
+          'weight' => '-6',
+        ),
+      ),
+    ),
+  );
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   // Translatables
   // Included for use with string extractors like potx.
   t('blogs');
