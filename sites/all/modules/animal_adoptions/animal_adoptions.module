@@ -693,28 +693,6 @@ function build_adoption_form($arg1) {
 
 
     $output = '<div>
-    <h2>When considering adopting an animal from the SPCA, the following <span>policies</span> must be adhered to:</h2>
-    <p><h4>You must be prepared to <span>pay a fee*</span>. Adoption Fees are as follows</h4>
-    <ul><li><span class=yellow-highlight>Dog Adoption Fees $75.00 for an intact/un-spayed dog or puppy</span></li>
-    <li><span class=yellow-highlight>Cat Adoption Fees $50.00 for an intact/un-spayed cat of kitten</span></li>
-    <li><span class=yellow-highlight>Dog Adoption Fees $175.00 for a spayed/neutered dog or puppy</span></li>
-    <li><span class=yellow-highlight>Cat Adoption Fees $125.00 for a spayed/neutered cat of kitten</span></li>
-    <li><span class=yellow-highlight>Vaccines Fees $ 10.00 for each Vaccine Given</span></li>
-    <li><span class=yellow-highlight>Deposits $ 75.00 when adopting a dog, $50.00 when adopting a cat.</span></li></ul> We require a refundable deposit on the spaying/neutering of dogs and cats. This deposit will be refunded, by cheque, once your pet has been spayed or neutered. We do require confirmation of this from your Veterinarian.
-    <br/>*All adoption fees include de worming of your pet.</p>
-    <p><h4>You must be prepared to <span>have your pet spayed or neutered</span> in required time frame.</h4>
-    <ul><li>If adopting an adult dog or cat, you will be given a 2 month time limit to have your adopted pet spayed or neutered.</li>
-    <li>If adopting a puppy or kitten, the adopted pet will need to be spayed or neutered when it had reached 6 months of age.</li>
-    </ul></p>
-    <p>All adopted pets must be house pets, and not living outside for extended periods of time.</p>
-    <p>You must understand that animals are a lifelong commitment that requires time and financial obligations.</p>
-    <p>We cannot guarantee the health or temperament of an adopted pet. Some pets may not be housebroken or received training of any sorts.</p>
-    <p>All adopted pets are not to be re homed, sold or given away by the owners. If you are not able to keep your pet, the Clarenville SPCA must be contacted and we will decide if another home is suitable, or if the pet should be returned to our SPCA. You are not allowed to leave your pet with another SPCA or Rescue Group; you are required to return the pet to the Clarenville SPCA.</p>
-    <p>After adoption of your pet is complete, the animal is the responsibility of the adopter. The SPCA, at any time, has the right to intervene if it is suspected that the animal is in any way being neglected, and/or abused. The SPCA reserves the right to remove the animal if the SPCA feels the animal is not being properly looked after. Also, the SPCA reserves the right to have access to any animal adopted, at any time.</p>
-    <p>Pets are not to be adopted out as gifts for others, unless special permission is granted.</p>
-    <p>We will need to speak to all adults in your household before we can approve your adoption application.</p>
-    <p>Permission from a landlord must be obtained. A letter may be required.</p>
-    <p>Adoption fees are refundable for 7 days from adoption date unless extended with approval by the Clarenville Area SPCA\'s Board of Directors.</p>
     <p><h4>Disclaimer</h4>The SPCA disclaims any responsibility for an animal or animals adopted from it. The SPCA does not warrant and cannot warrant the health, fitness, or temperament of the animal; and it makes no representations as to its health, fitness or temperament. Should your Veterinarian determine that the animal is in poor health or that it is in need of treatment of any sort or that the destruction of the animal is required, the SPCA disclaims any responsibility to you for the health or costs of the animal or the costs of any such treatment or destruction. No warranties express or implied exist.</p>
     <h2>You are applying to adopt <span>' . $namefam['name'] . '</span></h2></div>';
     /*build the form*/
