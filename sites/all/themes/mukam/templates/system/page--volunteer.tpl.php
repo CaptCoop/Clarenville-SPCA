@@ -103,7 +103,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
             <?php endif; ?>
             <a href="#"><div class="social-box"><i class="mukam-youtube"></i></div></a>
             <a href="#"><div class="social-box"><i class="mukam-tweet"></i></div></a>
-            <a href="https://www.facebook.com/groups/clarenvilleareaspca/" target="_blank"><div class="social-box"><i class="mukam-face"></i></div></a>  
+            <a href="https://www.facebook.com/ClarenvilleAreaSPCAAdoptables/" target="_blank"><div class="social-box"><i class="mukam-face"></i></div></a>  
         </div>
       </div>
     </div>
