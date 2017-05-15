@@ -1182,11 +1182,6 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     '#type' => 'submit',
     '#value' => 'Submit',
     '#weight' => 2,
-    '#states' => array(
-        'enabled' => array(// action to take.
-            ':input[name="tos-agree-box"]' => array('value' => 1),
-        ),
-    ),
   );
   return $form;
 }
