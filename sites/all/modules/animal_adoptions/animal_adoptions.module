@@ -1166,9 +1166,9 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     $form['animal-type']['cat']['scratch']['#disabled'] = TRUE;
     $form['animal-type']['cat']['#collapsed'] = TRUE;
   }
-  $form['disclaim'] = array(
+  $form['animal-type']['disclaim'] = array(
     '#markup' => t('<h4>Disclaimer</h4>The SPCA disclaims any responsibility for an animal or animals adopted from it. The SPCA does not warrant and cannot warrant the health, fitness, or temperament of the animal; and it makes no representations as to its health, fitness or temperament. Should your Veterinarian determine that the animal is in poor health or that it is in need of treatment of any sort or that the destruction of the animal is required, the SPCA disclaims any responsibility to you for the health or costs of the animal or the costs of any such treatment or destruction. No warranties express or implied exist.<br/>'),
-
+    '#weight' => 3,
   );
   $form['tos-agree'] = array(
     '#type' => 'checkboxes',
@@ -1176,7 +1176,7 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     '#options' => drupal_map_assoc(array(t('I agree'))),
     '#title' => t('I have read and agree to the Terms of Service'),
     '#required' => TRUE,
-    '#weight' => 2,
+    '#weight' => 1,
   );
   $form['submit'] = array(
     '#type' => 'submit',
