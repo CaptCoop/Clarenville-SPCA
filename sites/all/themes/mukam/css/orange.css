@@ -30,7 +30,8 @@
 .menu-widget ul li:hover {border-left: 3px solid #ff9c00;color: #ff9c00;}
 .menu-widget .active {color: #ff9c00!important;border-left: 3px solid #ff9c00!important;}
 .overthumb {background: #ff9c00;}
-a, a:hover {color: #ff9c00;}
+a {color: #ff9c00;}
+a:hover {color:#76b737;}
 span {color: #ff9c00;}
 
 .header-5 .search-widget .social-box { background: #ff9c00;} 
