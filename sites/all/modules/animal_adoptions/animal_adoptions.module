@@ -693,7 +693,6 @@ function build_adoption_form($arg1) {
 
 
     $output = '<div>
-    <p><h4>Disclaimer</h4>The SPCA disclaims any responsibility for an animal or animals adopted from it. The SPCA does not warrant and cannot warrant the health, fitness, or temperament of the animal; and it makes no representations as to its health, fitness or temperament. Should your Veterinarian determine that the animal is in poor health or that it is in need of treatment of any sort or that the destruction of the animal is required, the SPCA disclaims any responsibility to you for the health or costs of the animal or the costs of any such treatment or destruction. No warranties express or implied exist.</p>
     <h2>You are applying to adopt <span>' . $namefam['name'] . '</span></h2></div>';
     /*build the form*/
 
@@ -1167,10 +1166,27 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     $form['animal-type']['cat']['scratch']['#disabled'] = TRUE;
     $form['animal-type']['cat']['#collapsed'] = TRUE;
   }
+  $form['disclaim'] = array(
+    '#markup' => t('<h4>Disclaimer</h4>The SPCA disclaims any responsibility for an animal or animals adopted from it. The SPCA does not warrant and cannot warrant the health, fitness, or temperament of the animal; and it makes no representations as to its health, fitness or temperament. Should your Veterinarian determine that the animal is in poor health or that it is in need of treatment of any sort or that the destruction of the animal is required, the SPCA disclaims any responsibility to you for the health or costs of the animal or the costs of any such treatment or destruction. No warranties express or implied exist.<br/>'),
+
+  );
+  $form['tos-agree'] = array(
+    '#type' => 'checkboxes',
+    '#id' => 'tos-agree-box',
+    '#options' => drupal_map_assoc(array(t('I agree'))),
+    '#title' => t('I have read and agree to the Terms of Service'),
+    '#required' => TRUE,
+    '#weight' => 2,
+  );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Submit',
     '#weight' => 2,
+    '#states' => array(
+        'enabled' => array(// action to take.
+            ':input[name="tos-agree-box"]' => array('value' => 1),
+        ),
+    ),
   );
   return $form;
 }
