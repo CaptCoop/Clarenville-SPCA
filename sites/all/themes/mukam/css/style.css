@@ -154,10 +154,10 @@
 	margin: 0px;
 }
 .isotope-element a, .isotope-element a code {
-	color: #000 !important;
+	color: #ff9c00 !important;
 }
 .isotope-element a:hover, .isotope-element a:hover code{
-	color:  #0cadbe !important;
+	color: #76b737 !important;
 }
 .subscribe-widget form{
 	width: 80%;
