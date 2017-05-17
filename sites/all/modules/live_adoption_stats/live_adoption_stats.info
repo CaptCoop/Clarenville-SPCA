@@ -1,0 +1,5 @@
+name = SPCA Clarenville Live Adoption Stats
+description = This module counts and displays to the screen, all the cats, dogs and total rescues for the current year.
+core = 7.x
+package = SPCA
+files [] = live_adoption_stats.module
