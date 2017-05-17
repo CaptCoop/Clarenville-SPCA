@@ -1036,6 +1036,7 @@ background: #0cadbe;
 	border-bottom: 5px solid #f2f2f2; 
 }
 
+.btn-info{color:#ffffff;background-color:#76b737;border-color:#357ebd;}.btn-info:hover,.btn-info:focus,.btn-info:active,.btn-info.active,.open .dropdown-toggle.btn-info{color:#ffffff;background-color:#357ebd;border-color:#269abc;}
 .none-color { 
 	border:0;
 }
@@ -1081,8 +1082,22 @@ background: #0cadbe;
 
 .font-italic{font-style: italic;}
 .font-bold{font-weight: 600;}
-
-.form-control { border: 1px solid #ebebeb; }
+.container-inline-date .form-item input {
+    height: 40px;
+    color: #333333;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border-color: #f7f7f7;
+}
+.form-control { /*border: 1px solid #ebebeb;*/
+    height: 40px;
+    color: #333333;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border-color: #f7f7f7;
+    }
 .parallax-container {
 	background: url(../img/parallax/parallax1.png);
 	background-repeat:no-repeat;
