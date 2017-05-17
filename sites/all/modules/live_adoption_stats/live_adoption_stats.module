@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * The main module file.  This file contains all the admin functions for animal adoptions live counter.
+ * 
+ */
+
+ /**
+  *
+  *Implements hook_page_alter()
+  */
+ function live_adoption_stats_page_alter(&$page){
+    
+    $animals = live_adoption_stats_get_total_adoption_numbers();
+    //$animals+=9775;//this is the total number before the website came online.
+    
+    $dogs = live_adoption_stats_get_total_adopted_dogs();//+668
+    
+    $catts = live_adoption_stats_get_total_adopted_cats();//+1461
+    
+    $page['footer_facts'] = array(
+        '#markup' => t('<div class="col-md-3 timer-wrap"><h4>Dogs Rescued</h4><span class="timer">'.$dogs.'</span><p>Finding families for every animal since 1989!</p>
+</div>
+
+<div class="col-md-3 timer-wrap"><h4>Cats Rescued</h4><span class="timer">'.$catts.'</span><p>To protect and care for animals that have no other shelter.</p>
+</div>
+
+<div class="col-md-3 timer-wrap"><h4>Rescues Since 1994</h4><span class="timer">'.$animals.'</span><p>The Gladys Groves Copeland Animal Shelter. Open 365 days a year!</p>
+</div>
+
+<div class="col-md-3 timer-wrap"><h4>Facebook Popularity</h4><span class="timer">4,175</span><p>Follow all our furry friends on fun adventures!</p>
+</div>'),
+    );
+ }
+ 
+ /**
+  *gets the total number of adopted animals so far 
+  */
+ function live_adoption_stats_get_total_adoption_numbers(){
+    
+    $base = db_select('field_data_field_status_p', 'fs')->condition('fs.field_status_p_tid', 20, '=')->fields('fs', array('title'));
+  $total = $base->countQuery()->execute()->fetchField();
+  // scope
+  
+  return $total;
+ }
+ 
+ /**
+  *gets the total number of adopted dogs so far 
+  */
+ function live_adoption_stats_get_total_adopted_dogs(){
+    
+  $query = db_select('field_data_field_status_p', 'fs');
+  $query->join('field_data_field_animal_family', 'ca', 'fs.entity_id = ca.entity_id AND fs.field_status_p_tid = 20 AND ca.field_animal_family_tid = :aid', array(':aid' => 8));
+  $query->fields('fs', array('name'));
+  $newresult = $query->countQuery()->execute()->fetchField();
+  
+  return $newresult;
+ }
+ 
+ /**
+  *gets the total number of adopted cats so far 
+  */
+ function live_adoption_stats_get_total_adopted_cats(){
+    
+  $query = db_select('field_data_field_status_p', 'fs');
+  $query->join('field_data_field_animal_family', 'ca', 'fs.entity_id = ca.entity_id AND fs.field_status_p_tid = 20 AND ca.field_animal_family_tid = :aid', array(':aid' => 7));
+  $query->fields('fs', array('name'));
+  $tcat = $query->countQuery()->execute()->fetchField();
+  
+  return $tcat;
+ }
