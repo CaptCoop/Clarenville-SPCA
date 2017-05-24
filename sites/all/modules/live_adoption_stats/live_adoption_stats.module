@@ -53,7 +53,12 @@
     
   $query = db_select('field_data_field_status_p', 'fs');
   $query->join('field_data_field_animal_family', 'ca', 'fs.entity_id = ca.entity_id AND fs.field_status_p_tid = 20 AND ca.field_animal_family_tid = :aid', array(':aid' => 8));
-  $query->fields('fs', array('name'));
+  $query->fields('fs', array('entity_id'));
+  //$ress = $query->execute();
+  //$hold = array();//has all ids for adopted dogs since beginning of time
+  //foreach($ress as $samp){
+  //  array_push($hold, $samp->entity_id);
+  //}
   $newresult = $query->countQuery()->execute()->fetchField();
   
   return $newresult;
