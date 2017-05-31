@@ -19,6 +19,8 @@
     
     $catts = live_adoption_stats_get_total_adopted_cats();//+1461
     
+    $flik = social_counters_social_counters();
+    
     $page['footer_facts'] = array(
         '#markup' => t('<div class="col-md-3 timer-wrap"><h4>Dogs Rescued</h4><span class="timer">'.$dogs.'</span><p>Finding families for every animal since 1989!</p>
 </div>
@@ -29,7 +31,7 @@
 <div class="col-md-3 timer-wrap"><h4>Rescues Since 1994</h4><span class="timer">'.$animals.'</span><p>The Gladys Groves Copeland Animal Shelter. Open 365 days a year!</p>
 </div>
 
-<div class="col-md-3 timer-wrap"><h4>Facebook Popularity</h4><span class="timer">4,175</span><p>Follow all our furry friends on fun adventures!</p>
+<div class="col-md-3 timer-wrap"><h4>Facebook Popularity</h4><span class="timer">'.$flik['facebook'].'</span><p>Follow all our furry friends on fun adventures!</p>
 </div>'),
     );
  }
