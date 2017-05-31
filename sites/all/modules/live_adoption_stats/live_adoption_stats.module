@@ -20,7 +20,7 @@
     $catts = live_adoption_stats_get_total_adopted_cats();//+1461
     
    $flik = social_counters_counters_output();
-    
+   $tlike =  $flik['facebook']['number'] + $flik['facebook1']['number'];
    // $variabble = array('id' => 170810676298376, 'token' => 'EAAEFR2ZCoZB18BAJVrq8HVttbWSZC7xwFZC2n0Qnek61zf1jxwvJcOZCqpbjlaGDlCgAsZAweuZBA7Gxf2ZA8kBmPySwv8JhEodozAVDJHGmnW8ZCZA6CMZAiQDPYNZC4GZB0KqS1JSUz4ZA2zAKvMU2P2aYhVtOq6fbwNNX2WY7kvVf47EAZDZD');
    //$flik = social_counters_get_facebook_likes($variabble);
     
@@ -35,7 +35,7 @@
 <div class="col-md-3 timer-wrap"><h4>Rescues Since 1994</h4><span class="timer">'.$animals.'</span><p>The Gladys Groves Copeland Animal Shelter. Open 365 days a year!</p>
 </div>
 
-<div class="col-md-3 timer-wrap"><h4>Facebook Popularity</h4><span class="timer">'.$flik['facebook']['number'].'</span><p>Follow all our furry friends on fun adventures!</p>
+<div class="col-md-3 timer-wrap"><h4>Facebook Popularity</h4><span class="timer">'.$tlike.'</span><p>Follow all our furry friends on fun adventures!</p>
 </div>'),
     );
  }

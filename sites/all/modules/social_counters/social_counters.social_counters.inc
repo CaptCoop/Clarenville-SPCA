@@ -27,6 +27,24 @@ function social_counters_social_counters() {
     ),
   );
 
+  $items['facebook1'] = array(
+    'callback' => 'social_counters_get_facebook_likes',
+    'title' => t('Facebook1'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Facebook Page Name (or User ID)'),
+        'description' => t("Either the page name or ID. Examples: 'coca-cola' or '40796308305'."),
+      ),
+      'token' => array(
+        'title' => t('Facebook Access Token'),
+        'description' => t('See <a href="@facebook-handbook">Access Tokens on Facebook API page</a> and <a href="@stackoverflow-url">detailed explanation on stackoverflow.com</a>.', array(
+          '@facebook-handbook' => url('https://developers.facebook.com/docs/facebook-login/access-tokens'),
+          '@stackoverflow-url' => url('http://stackoverflow.com/a/28418469/1391963'),
+        )),
+      ),
+    ),
+  );
+  
   // Twitter.
   $items['twitter'] = array(
     'callback' => 'social_counters_get_twitter_followers',
@@ -196,6 +214,7 @@ function social_counters_get_facebook_likes($variables) {
     $result = json_decode($response->data);
     if ($response->code == 200) {
       $number = $result->country_page_likes;
+      //$number = $result->likes;
     }
     else {
       if (!empty($result->error)) {
