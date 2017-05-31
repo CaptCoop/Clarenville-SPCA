@@ -21,10 +21,7 @@
     
    $flik = social_counters_counters_output();
    $tlike =  $flik['facebook']['number'] + $flik['facebook1']['number'];
-   // $variabble = array('id' => 170810676298376, 'token' => 'EAAEFR2ZCoZB18BAJVrq8HVttbWSZC7xwFZC2n0Qnek61zf1jxwvJcOZCqpbjlaGDlCgAsZAweuZBA7Gxf2ZA8kBmPySwv8JhEodozAVDJHGmnW8ZCZA6CMZAiQDPYNZC4GZB0KqS1JSUz4ZA2zAKvMU2P2aYhVtOq6fbwNNX2WY7kvVf47EAZDZD');
-   //$flik = social_counters_get_facebook_likes($variabble);
-    
-    
+      
     $page['footer_facts'] = array(
         '#markup' => t('<div class="col-md-3 timer-wrap"><h4>Dogs Rescued</h4><span class="timer">'.$dogs.'</span><p>Finding families for every animal since 1989!</p>
 </div>
@@ -82,3 +79,234 @@
   
   return $tcat;
  }
+ 
+ 
+ 
+ /**
+ * Implements hook_social_counters().
+ * from social_counters module over ride
+ */
+function live_adoption_stats_social_counters() {
+  // Facebook.
+  $items['facebook'] = array(
+    'callback' => 'live_adoption_stats_get_facebook_likes',
+    'title' => t('Facebook'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Facebook Page Name (or User ID)'),
+        'description' => t("Either the page name or ID. Examples: 'coca-cola' or '40796308305'."),
+      ),
+      'token' => array(
+        'title' => t('Facebook Access Token'),
+        'description' => t('See <a href="@facebook-handbook">Access Tokens on Facebook API page</a> and <a href="@stackoverflow-url">detailed explanation on stackoverflow.com</a>.', array(
+          '@facebook-handbook' => url('https://developers.facebook.com/docs/facebook-login/access-tokens'),
+          '@stackoverflow-url' => url('http://stackoverflow.com/a/28418469/1391963'),
+        )),
+      ),
+    ),
+  );
+
+  $items['facebook1'] = array(
+    'callback' => 'live_adoption_stats_get_facebook_likes',
+    'title' => t('Facebook1'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Facebook Page Name (or User ID)'),
+        'description' => t("Either the page name or ID. Examples: 'coca-cola' or '40796308305'."),
+      ),
+      'token' => array(
+        'title' => t('Facebook Access Token'),
+        'description' => t('See <a href="@facebook-handbook">Access Tokens on Facebook API page</a> and <a href="@stackoverflow-url">detailed explanation on stackoverflow.com</a>.', array(
+          '@facebook-handbook' => url('https://developers.facebook.com/docs/facebook-login/access-tokens'),
+          '@stackoverflow-url' => url('http://stackoverflow.com/a/28418469/1391963'),
+        )),
+      ),
+    ),
+  );
+  
+  // Twitter.
+  $items['twitter'] = array(
+    'callback' => 'social_counters_get_twitter_followers',
+    'title' => t('Twitter'),
+    'dependencies' => array(
+      'oauth_common' => t('Twitter functionality depends on the <a href="@oauth">OAuth module</a>.', array('@oauth' => url('https://drupal.org/project/oauth'))),
+    ),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Twitter account'),
+        'description' => t('The Twitter account to pull the number of followers.'),
+      ),
+      'consumer_key' => array(
+        'title' => t('OAuth Consumer Key'),
+        'description' => t('OAuth Consumer Key (Twitter).'),
+      ),
+      'consumer_secret' => array(
+        'title' => t('OAuth Consumer Secret'),
+        'description' => t('OAuth Consumer Secret (Twitter).'),
+      ),
+      'token' => array(
+        'title' => t('OAuth Token (Twitter).'),
+        'description' => t('OAuth Token (Twitter).'),
+      ),
+      'secret' => array(
+        'title' => t('OAuth Secret (Twitter).'),
+        'description' => t('OAuth Secret (Twitter).'),
+      ),
+    ),
+  );
+
+  // Google Plus.
+  $items['google_plus'] = array(
+    'callback' => 'social_counters_get_google_plus_followers',
+    'title' => t('Google Plus'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Google Plus Name (or User ID)'),
+        'description' => t("Either the page name or ID. Examples: '+Coca-Cola' or '113050383214450284645'"),
+      ),
+      'key' => array(
+        'title' => t('Google Plus API Key'),
+        'description' => t('You can generate Google Plus API Key at <a href="@dev-google">developers.google.com</a>.', array(
+          '@dev-google' => url('https://developers.google.com/api-client-library/python/guide/aaa_apikeys'),
+        )),
+      ),
+    ),
+  );
+
+  // Vk.com.
+  $items['vk'] = array(
+    'callback' => 'social_counters_get_vk_members',
+    'title' => t('VK'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('VK Group ID'),
+        'description' => t('The group ID of a VK Group.'),
+      ),
+    ),
+  );
+
+  // Instagram.
+  $items['instagram'] = array(
+    'callback' => 'social_counters_get_instagram_followers',
+    'title' => t('Instagram'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Instagram Id'),
+        'description' => t('Instagram Id. Pay attention that Instagram username isn\'t valid. Examples: 249655166'),
+      ),
+      'access_token' => array(
+        'title' => t('Access Token'),
+        'description' => t('You can read how to generate Instagram Access Token at  <a href="@dev-instagram">instagram.com</a>.', array(
+          '@dev-instagram' => url('https://instagram.com/developer/authentication/'),
+        )),
+      ),
+    ),
+  );
+
+  // YouTube.
+  $items['youtube'] = array(
+    'callback' => 'social_counters_get_youtube_subscribers',
+    'title' => t('YouTube'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('YouTube username'),
+        'description' => t('YouTube username. Examples: cocacola'),
+      ),
+      'key' => array(
+        'title' => t('Google Plus API Key'),
+        'description' => t('You can generate Google Plus API Key at <a href="@dev-google">developers.google.com</a>.', array(
+          '@dev-google' => url('https://developers.google.com/api-client-library/python/guide/aaa_apikeys'),
+        )),
+      ),
+    ),
+  );
+
+  // Flickr.
+  $items['flickr'] = array(
+    'callback' => 'social_counters_get_flickr_members',
+    'title' => t('Flickr'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Flickr group name'),
+        'description' => t('Flickr group name. Examples: thecoca-colaco'),
+      ),
+      'api_key' => array(
+        'title' => t('Flickr API Key'),
+        'description' => t('You can generate Flickr API Key at <a href="@dev-flickr">flickr.com</a>.', array(
+          '@dev-flickr' => url('https://www.flickr.com/services/apps/create/apply/'),
+        )),
+      ),
+    ),
+  );
+
+  // Pinterest.
+  $items['pinterest'] = array(
+    'callback' => 'social_counters_get_pinterest_followers',
+    'title' => t('Pinterest'),
+    'variables' => array(
+      'id' => array(
+        'title' => t('Pinterest username'),
+        'description' => t("Pinterest username or id. Examples: 'cocacola' or '205265832924678423'"),
+      ),
+      'access_token' => array(
+        'title' => t('Access Token'),
+        'description' => t('You can read how to generate Pinterest Access Token at  <a href="@dev-pinterest">developers.pinterest.com</a>.', array(
+          '@dev-pinterest' => url('https://developers.pinterest.com/docs/api/authentication/'),
+        )),
+      ),
+    ),
+  );
+
+  // Vk.com.
+  $items['soundcloud'] = array(
+    'callback' => 'social_counters_get_soundcloud_followers',
+    'title' => t('Soundcloud'),
+    'variables' => array(
+      'id' => array(
+        'title' => t("Soundcloud user's id or name."),
+        'description' => t("Soundcloud user's id or name. Examples: 'happymusic' or '303027'."),
+      ),
+      'client_id' => array(
+        'title' => t("The client id."),
+        'description' => t('The client id belonging to your application. You can find it on <a href="@soundcloud-apps">Your Applications page</a>.', array(
+          '@soundcloud-apps' => url('http://soundcloud.com/you/apps'),
+        )),
+      ),
+    ),
+  );
+
+  return $items;
+}
+
+/**
+ * Get the number of Facebook likes.
+ * from social_counters module over ride
+ */
+function live_adoption_stats_get_facebook_likes($variables) {
+  $number = FALSE;
+
+  try {
+    $url = url('https://graph.facebook.com/' . $variables['id'], array('query' => array(
+      'access_token' => $variables['token'],
+      'fields' => 'country_page_likes',
+    )));
+    $response = drupal_http_request($url);
+    $result = json_decode($response->data);
+    if ($response->code == 200) {
+      $number = $result->country_page_likes;
+      //$number = $result->likes;
+    }
+    else {
+      if (!empty($result->error)) {
+        $message = $variables['social_network'] . ': ' . $result->error->message;
+        watchdog('social_counters', check_plain($message), array(), WATCHDOG_WARNING);
+      }
+    }
+  }
+  catch (Exception $e) {
+    watchdog_exception('social_counters', $e);
+  }
+
+  return $number;
+}
+

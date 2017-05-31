@@ -208,13 +208,13 @@ function social_counters_get_facebook_likes($variables) {
   try {
     $url = url('https://graph.facebook.com/' . $variables['id'], array('query' => array(
       'access_token' => $variables['token'],
-      'fields' => 'country_page_likes',
+      'fields' => 'likes',
     )));
     $response = drupal_http_request($url);
     $result = json_decode($response->data);
     if ($response->code == 200) {
-      $number = $result->country_page_likes;
-      //$number = $result->likes;
+      //$number = $result->country_page_likes;
+      $number = $result->likes;
     }
     else {
       if (!empty($result->error)) {
