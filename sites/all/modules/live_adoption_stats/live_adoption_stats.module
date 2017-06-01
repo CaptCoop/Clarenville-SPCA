@@ -13,7 +13,7 @@
  function live_adoption_stats_page_alter(&$page){
     
     $animals = live_adoption_stats_get_total_adoption_numbers();
-    //$animals+=9775;//this is the total number before the website came online.
+    $animals+=1370;//this is the total number before the website came online.
     
     $dogs = live_adoption_stats_get_total_adopted_dogs();//+668
     
@@ -23,16 +23,16 @@
    $tlike =  $flik['facebook']['number'] + $flik['facebook1']['number'];
       
     $page['footer_facts'] = array(
-        '#markup' => t('<div class="col-md-3 timer-wrap"><h4>Dogs Rescued</h4><span class="timer">'.$dogs.'</span><p>Finding families for every animal since 1989!</p>
+        '#markup' => t('<div class="col-md-3 timer-wrap"><h4>Dogs Adopted in '.date('Y', time()).'</h4><span class="timer">'.$dogs.'</span><p>Finding families for every animal since 1989!</p>
 </div>
 
-<div class="col-md-3 timer-wrap"><h4>Cats Rescued</h4><span class="timer">'.$catts.'</span><p>To protect and care for animals that have no other shelter.</p>
+<div class="col-md-3 timer-wrap"><h4>Cats Adopted in '.date('Y', time()).'</h4><span class="timer">'.$catts.'</span><p>To protect and care for animals that have no other shelter.</p>
 </div>
 
-<div class="col-md-3 timer-wrap"><h4>Rescues Since 1994</h4><span class="timer">'.$animals.'</span><p>The Gladys Groves Copeland Animal Shelter. Open 365 days a year!</p>
+<div class="col-md-3 timer-wrap"><h4>Adoptions Since 2011</h4><span class="timer">'.$animals.'</span><p>The Gladys Groves Copeland Animal Shelter. Open 365 days a year!</p>
 </div>
 
-<div class="col-md-3 timer-wrap"><h4>Facebook Popularity</h4><span class="timer">'.$tlike.'</span><p>Follow all our furry friends on fun adventures!</p>
+<div class="col-md-3 timer-wrap"><h4>Our Facebook Popularity</h4><span class="timer">'.$tlike.'</span><p>Follow all our furry friends on fun adventures!</p>
 </div>'),
     );
  }
@@ -53,20 +53,48 @@
   *gets the total number of adopted dogs so far 
   */
  function live_adoption_stats_get_total_adopted_dogs(){
-    
+    //get all the adopted dogs in the database
   $query = db_select('field_data_field_status_p', 'fs');
   $query->join('field_data_field_animal_family', 'ca', 'fs.entity_id = ca.entity_id AND fs.field_status_p_tid = 20 AND ca.field_animal_family_tid = :aid', array(':aid' => 8));
   $query->fields('fs', array('entity_id'));
-  //$ress = $query->execute();
-  //$hold = array();//has all ids for adopted dogs since beginning of time
-  //foreach($ress as $samp){
-  //  array_push($hold, $samp->entity_id);
-  //}
-  $newresult = $query->countQuery()->execute()->fetchField();
+  $ress = $query->execute();
+  $hold = array();//has all ids for adopted dogs since beginning of time
+  foreach($ress as $samp){
+   array_push($hold, $samp->entity_id);
+  }
+  //$newresult = $query->countQuery()->execute()->fetchField();
   
-  return $newresult;
+  $final_count = live_adoption_stats_filter_this_year($hold);
+  
+  //return $newresult;
+  return $final_count;//an array of adopted dogs entity_id
  }
- 
+ /**
+  *Called by the hook_get_total_adopted... functions above
+  *filters out the supplied ids and counts the ones for this year only
+  *returns the number of ids that are for the current year
+  *
+  */
+ function live_adoption_stats_filter_this_year($adopted_id){
+    $counter = 0;
+    //get the current year
+    $cyear = date('Y', time());
+    
+    foreach($adopted_id as $id){
+        $base = db_select('field_data_field_intake_date', 't')->condition('t.entity_id', $id, '=')->fields('t', array('field_intake_date_value2'));
+        $name = $base->execute();
+        // scope
+        $adopted_date;
+        foreach ($name as $row) {
+          $adopted_date = $row;
+        }
+        //see if years match, if so add 1 to the counter
+        if(strcmp($cyear, substr($adopted_date->field_intake_date_value2, 0, 4))==0){
+            $counter++;
+        }
+    }
+    return $counter;
+ }
  /**
   *gets the total number of adopted cats so far 
   */
@@ -74,10 +102,17 @@
     
   $query = db_select('field_data_field_status_p', 'fs');
   $query->join('field_data_field_animal_family', 'ca', 'fs.entity_id = ca.entity_id AND fs.field_status_p_tid = 20 AND ca.field_animal_family_tid = :aid', array(':aid' => 7));
-  $query->fields('fs', array('name'));
-  $tcat = $query->countQuery()->execute()->fetchField();
+  $query->fields('fs', array('entity_id'));
+  //$tcat = $query->countQuery()->execute()->fetchField();
+  $resss = $query->execute();
+  $hold = array();//has all ids for adopted cats since beginning of time
+  foreach($resss as $samp){
+   array_push($hold, $samp->entity_id);
+  }
   
-  return $tcat;
+  $final_count = live_adoption_stats_filter_this_year($hold);
+  
+  return $final_count;//an array of adopted dogs entity_id
  }
  
  
