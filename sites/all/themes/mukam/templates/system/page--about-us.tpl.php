@@ -182,7 +182,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
 </header>
 <section class="mukam-waypoint" data-animate-down="mukam-header-small <?php print $headerClass; ?>" data-animate-up="mukam-header-large <?php print $headerClass; ?>">
   <?php if (!empty($breadcrumb) && !mukam_hidden_breadcrumb()):  ?>
-  <div class="caption-out fadein scaleInv anim_2">
+  <div class="caption-out"> <!-- fadein scaleInv anim_2 -->
     <div class="container">
       <div class="row">
         <div class="col-md-8 caption">
