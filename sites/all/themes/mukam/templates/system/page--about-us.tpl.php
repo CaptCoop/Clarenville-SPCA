@@ -191,7 +191,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
               <h3 class="page-header bordered light"><?php print $title; ?></h3>
           <?php endif; ?>
           <?php print render($title_suffix); ?>
-          <p class="fadein scaleInv anim_4">Clarenville Area SPCA is a proud member of SPCA NL</p>
+          <p>Clarenville Area SPCA is a proud member of SPCA NL</p>
         </div>
         <?php print $breadcrumb; ?>
       </div>
