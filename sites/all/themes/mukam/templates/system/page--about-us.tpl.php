@@ -101,7 +101,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
               </div>
               </div>-->
             <?php endif; ?>
-            <a href="http://blog.instagram.com/" target="_blank"><div class="social-box"><i class="entypo-instagram"></i></div></a>
+            <a href="https://blog.instagram.com/" target="_blank"><div class="social-box"><i class="entypo-instagram"></i></div></a>
             <a href="https://www.facebook.com/ClarenvilleAreaSPCAAdoptables/" target="_blank"><div class="social-box"><i class="mukam-face"></i></div></a>  
         </div>
       </div>
