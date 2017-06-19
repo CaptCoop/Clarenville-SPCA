@@ -2407,7 +2407,8 @@ function get_animal_details_by_id($animals_id) {
 
   /*look up the animal cat breed*/
 
-
+  $animal_breed='';
+  
   $anbr = db_select('field_data_field_cat_breed', 'cb')->condition('cb.entity_id', $animals_id, '=')->fields('cb', array('field_cat_breed_tid'));
   $anb = $anbr->execute();
   //if(!empty($anb)){

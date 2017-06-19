@@ -79,14 +79,14 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
     <?php print render($page['top_header']); ?>
 <?php endif; ?> 
 <!-- Header -->
-<header id="mukam-header" class="mukam-header mukam-header-large <?php print $headerClass; ?> fadein scaleInv anim_1">
+<header id="mukam-header" class="mukam-header mukam-header-large <?php print $headerClass; ?> ">
   <div class="<?php print($topsection); ?>">
   <div class="top-section">
   <div class="container">
     <div class="row">
       <div class="col-sm-6 col-md-6">
         <div class="phone"><i class="mukam-mobile icon-3x pull-left"></i> (709) 466 3489</div>
-        <div class="email"><i class="mukam-envelope icon-3x pull-left"></i>support@clarenvilleareaspca.ca</div>
+        <div class="email"><i class="mukam-envelope icon-3x pull-left"></i>info@clarenvilleareaspca.ca</div>
       </div>
       <div class="col-sm-6 col-md-6">
         <div class="social">
@@ -182,7 +182,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
 </header>
 <section class="mukam-waypoint" data-animate-down="mukam-header-small <?php print $headerClass; ?>" data-animate-up="mukam-header-large <?php print $headerClass; ?>">
   <?php if (!empty($breadcrumb) && !mukam_hidden_breadcrumb()):  ?>
-  <div class="caption-out fadein scaleInv anim_2">
+  <div class="caption-out">
     <div class="container">
       <div class="row">
         <div class="col-md-8 caption">
@@ -191,7 +191,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
               <h3 class="page-header bordered light"><?php print $title; ?></h3>
           <?php endif; ?>
           <?php print render($title_suffix); ?>
-          <p class="fadein scaleInv anim_4">Clarenville Area SPCA is a proud member of SPCA NL</p>
+          <p>Clarenville Area SPCA is a proud member of SPCA NL</p>
         </div>
         <?php print $breadcrumb; ?>
       </div>
