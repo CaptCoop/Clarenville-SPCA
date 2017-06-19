@@ -190,7 +190,7 @@ function build_complete_adoption_contract($contact_id) {
   /*build the markup*/
 
 
-  $output = '<div class=adoption-print><h3>Clarenville SPCA</h3><p class=address><strong>Society for Prevention of Cruelty to Animals</strong><br/>125 Huntly Drive<br/>Clarenville, NL A5A 4L1<br/>TEl: (709) 466-3489  Fax: (709) 433-3080<br/>email:support@clarenvilleareaspca.ca</p>
+  $output = '<div class=adoption-print><h3>Clarenville SPCA</h3><p class=address><strong>Society for Prevention of Cruelty to Animals</strong><br/>125 Huntly Drive<br/>Clarenville, NL A5A 4L1<br/>TEl: (709) 466-3489  Fax: (709) 433-3080<br/>email:info@clarenvilleareaspca.ca</p>
   <h4>Adoption Contract</h4>
   <p>Congratulations on your new pet <strong>' . check_plain($pet['name']) . '<br /></strong>';
   (strcasecmp($pet['microchip'], 'not registered') == 0) ? $output .= '' : 'Microchip #: <strong>' . check_plain($pet['microchip']) . '</strong><br/>';
@@ -1738,7 +1738,7 @@ function get_all_adoption_ids() {
 
   // in scope
   $uidid = array();
-
+  array_push($uidid, 'Choose Application');
   foreach ($sql as $record) {
     array_push($uidid, $record->id);
   }
