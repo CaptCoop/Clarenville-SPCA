@@ -15,3 +15,5 @@
 [27-Apr-2017 18:30:14 UTC] PHP Deprecated:  Automatically populating $HTTP_RAW_POST_DATA is deprecated and will be removed in a future version. To avoid this warning set 'always_populate_raw_post_data' to '-1' in php.ini and use the php://input stream instead. in Unknown on line 0
 [12-May-2017 13:44:37 America/St_Johns] PHP Fatal error:  [] operator not supported for strings in /home/armoredw/public_html/test/sites/all/modules/views/includes/admin.inc on line 2399
 [16-Jun-2017 17:21:23 America/St_Johns] PHP Parse error:  syntax error, unexpected ''' (T_ENCAPSED_AND_WHITESPACE), expecting ')' in /home/armoredw/public_html/test/sites/all/themes/mukam/templates/system/page--about-us.tpl.php on line 93
+[18-Jun-2017 23:05:40 America/St_Johns] PHP Warning:  Unterminated comment starting line 424 in /home/armoredw/public_html/test/sites/all/modules/animal_adoptions/animal_request_match.inc on line 424
+[18-Jun-2017 23:05:40 America/St_Johns] PHP Fatal error:  Call to undefined function get_animal_id_based_on_category() in /home/armoredw/public_html/test/sites/all/modules/animal_adoptions/animal_request_match.inc on line 32

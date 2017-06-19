@@ -63,7 +63,7 @@ function build_animal_request_match_form($form, &$form_state) {
           $found_match_name .= l(t($animal_details['name']), $animal_details['url'], array('attributes' => array('target' => '_blank'), 'options' => array('relative' => TRUE))) . '  ';
 
           // load dropdown menu
-          array_push($found, $requested->id);
+          //array_push($found, $requested->id);
         }
       }
       $nextinline = array(check_plain($requested->id), $found_match_name, check_plain($requested->applicant_name), check_plain($requested->request_status), $requested->date_submitted, $requested->date_matched);
@@ -72,6 +72,7 @@ function build_animal_request_match_form($form, &$form_state) {
       // first arg needs to be collection of fields
       update_request_with_animal_id($found_match_id, $requested->id);
     }
+    array_push($found, $requested->id);
     // reset for next
     $found_match_id = '';
     $found_match_name = '';
