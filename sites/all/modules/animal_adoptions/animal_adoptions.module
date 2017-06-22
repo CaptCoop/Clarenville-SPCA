@@ -531,7 +531,7 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     '#prefix' => '<div>',
     '#suffix' => '</div>',
     '#type' => 'radios',
-    '#title' => t('Spayed/Nutered'),
+    '#title' => t('Spayed/Neutered'),
     '#options' => array(
       1 => t('Yes'),
       0 => t('No'),
@@ -679,7 +679,7 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     '#prefix' => '<div>',
     '#suffix' => '</div>',
     '#type' => 'radios',
-    '#title' => t('Are you aware of the costs associated with pet ownership, spaying or nutering, and vet care'),
+    '#title' => t('Are you aware of the costs associated with pet ownership, spaying or neutering, and vet care'),
     '#options' => array(
       1 => t('Yes'),
       0 => t('No'),
@@ -692,7 +692,7 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     '#prefix' => '<div>',
     '#suffix' => '</div>',
     '#type' => 'radios',
-    '#title' => t('Are you prepared to have your new pet spayed or nutered (if required) within the required time frame'),
+    '#title' => t('Are you prepared to have your new pet spayed or neutered (if required) within the required time frame'),
     '#options' => array(
       1 => t('Yes'),
       0 => t('No'),
@@ -777,7 +777,7 @@ function animal_adoptions_data_collection($form, &$form_state, $arg1, $atype) {
     '#prefix' => '<div>',
     '#suffix' => '</div>',
     '#type' => 'radios',
-    '#title' => t('Will this pet be allowed outside once spayed or nutered'),
+    '#title' => t('Will this pet be allowed outside once spayed or neutered'),
     '#options' => array(
       1 => t('Yes'),
       0 => t('No'),
