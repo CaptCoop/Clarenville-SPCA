@@ -98,7 +98,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
               </div>
               </div>
             <?php endif; ?>                
-            <a href="https://blog.instagram.com/" target="_blank"><div class="social-box"><i class="entypo-instagram"></i></div></a>
+            <a href="http://www.thepicta.com/user/clarenvillespca/243300858" target="_blank"><div class="social-box"><i class="entypo-instagram"></i></div></a>
             <a href="https://www.facebook.com/ClarenvilleAreaSPCAAdoptables/" target="_blank"><div class="social-box"><i class="mukam-face"></i></div></a>  
         </div>
       </div>
@@ -170,7 +170,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
     </div>
   </div>
 </header>
-<section class="mukam-waypoint" data-animate-down="mukam-header-small <?php print $headerClass; ?>" data-animate-up="mukam-header-large <?php print $headerClass; ?>">
+<section class="mukam-waypoint" <?php print $headerClass; ?>" <?php print $headerClass; ?>">
   <?php if (!empty($breadcrumb) && !mukam_hidden_breadcrumb()):  ?>
   <div class="caption-out">
     <div class="container">
@@ -182,16 +182,16 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
           <?php endif; ?>
           <?php print render($title_suffix); if(array_key_exists('#form_id', $page['content']['system_main'])){$eval = $page['content']['system_main']['#form_id'];} ?>
           <?php if(isset($eval)){switch($eval) { case 'user_register_form': ?>
-              <p class="fadein scaleInv anim_4">Only registered users can apply to adopt or foster any of our anilmals.  The good news is membership is free and only takes minuites!  Simply create a new accout below.  Or login if you have an account.</p>
+              <p>Only registered users can apply to adopt or foster any of our anilmals.  The good news is membership is free and only takes minuites!  Simply create a new accout below.  Or login if you have an account.</p>
             <?php break;  case 'user_login': ?>
-              <p class="fadein scaleInv anim_4">Welcome back.</p>
+              <p>Welcome back.</p>
             <?php break;  default: ?>
-              <p class="fadein scaleInv anim_4"></p>
+              <p></p>
           <?php }}  else{ ?>
           
           <?php //if(strcmp($page['content']['system_main']['#user_category'], 'register')==0){?>
             <!-- <p class="fadein scaleInv anim_4">Only registered users can apply to adopt or foster any of our anilmals.  The good news is membership is free!  Simply create a new accout below.</p> -->
-            <p class="fadein scaleInv anim_4"></p>
+            <p></p>
             <?php }?>
         </div>
         <?php print $breadcrumb; ?>

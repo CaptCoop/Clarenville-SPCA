@@ -76,7 +76,7 @@ $headerClass = get_header_type();
 $topsection = in_array($headerClass, array('header-2','header-3','header-4','header-7')) ? 'top-section-container2':'top-section-container';
 ?>
 <!-- Header -->
-<header id="mukam-header" class="mukam-header mukam-header-large <?php print $headerClass; ?> fadein scaleInv anim_1">
+<header id="mukam-header" class="mukam-header mukam-header-large <?php print $headerClass; ?> ">
   <div class="<?php print($topsection); ?>">
   <div class="top-section">
   <div class="container">
@@ -98,7 +98,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
               </div>
               </div>
             <?php endif; ?>
-            <a href="https://blog.instagram.com/" target="_blank"><div class="social-box"><i class="entypo-instagram"></i></div></a>
+            <a href="http://www.thepicta.com/user/clarenvillespca/243300858" target="_blank"><div class="social-box"><i class="entypo-instagram"></i></div></a>
             <a href="https://www.facebook.com/ClarenvilleAreaSPCAAdoptables/" target="_blank"><div class="social-box"><i class="mukam-face"></i></div></a>  
         </div>
       </div>
@@ -177,9 +177,9 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
     </div>
   </div>
 </header>
-<section class="mukam-waypoint" data-animate-down="mukam-header-small <?php print $headerClass; ?>" data-animate-up="mukam-header-large <?php print $headerClass; ?>">
+<section class="mukam-waypoint" <?php print $headerClass; ?>" <?php print $headerClass; ?>">
   <?php if (!empty($breadcrumb) && !mukam_hidden_breadcrumb()):  ?>
-  <div class="caption-out fadein scaleInv anim_2">
+  <div class="caption-out">
     <div class="container">
       <div class="row">
         <div class="col-md-8 caption">
@@ -188,7 +188,7 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
               <h3 class="page-header bordered light"><?php print $title; ?></h3>
           <?php endif; ?>
           <?php print render($title_suffix); ?>
-          <p class="fadein scaleInv anim_4"><?php if(isset($node)){ print $node->body['und'][0]['summary']; }?></p>
+          <p><?php if(isset($node)){ print $node->body['und'][0]['summary']; }?></p>
         </div>
         <?php print $breadcrumb; ?>
       </div>
@@ -206,11 +206,11 @@ $topsection = in_array($headerClass, array('header-2','header-3','header-4','hea
   <?php if (!empty($page['content_top_2'])): ?>
       <?php print render($page['content_top_2']); ?>
   <?php endif; ?>
-  <div class="bg-color grey fadein scaleInv anim_3">
+  <div class="bg-color grey">
     <div class="main-container container"> 
       <div class="row">
             <?php if (!empty($page['sidebar_first'])): ?>
-                <aside class="col-sm-3 col-md-3 sidebar fadein scaleInv anim_4" role="complementary">
+                <aside class="col-sm-3 col-md-3 sidebar" role="complementary">
                     <?php print render($page['sidebar_first']); ?>
                 </aside>  <!-- /#sidebar-first -->
             <?php endif; ?>
