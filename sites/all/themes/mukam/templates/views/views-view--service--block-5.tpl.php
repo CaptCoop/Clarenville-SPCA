@@ -27,7 +27,7 @@
  * @ingroup views_templates
  */
 ?>
-<div class="fadeInRight-1 blind tour-section animated <?php print $classes; ?>">
+<div class=" <?php print $classes; ?>"><!--fadeInRight-1 blind tour-section animated-->
   <div class="container">
     <div class="row">
       <div class="col-md-12">

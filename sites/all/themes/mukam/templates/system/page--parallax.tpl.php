@@ -125,9 +125,9 @@ $headerClass = 'header-6';
     </div>
   </div>
 </header>
-<section class="mukam-waypoint2" data-animate-down="mukam-header-small <?php print $headerClass; ?>" data-animate-up="mukam-header-large <?php print $headerClass; ?>">
+<section class="mukam-waypoint2" <?php print $headerClass; ?>"  <?php print $headerClass; ?>">
   <?php if (!empty($breadcrumb) && !mukam_hidden_breadcrumb()):  ?>
-  <div class="caption-out fadein scaleInv anim_2">
+  <div class="caption-out">
     <div class="container">
       <div class="row">
         <div class="col-md-8 caption">
@@ -136,7 +136,7 @@ $headerClass = 'header-6';
               <h3 class="page-header bordered light"><?php print $title; ?></h3>
           <?php endif; ?>
           <?php print render($title_suffix); ?>
-          <p class="fadein scaleInv anim_4">Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+          <p>Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
         </div>
         <?php print $breadcrumb; ?>
       </div>
