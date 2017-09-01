@@ -212,7 +212,8 @@ color: #fff; background: #eb6200;}
 
 .footer-widget .social-widget a:hover .socialbox i{color: #eb6200;}
 
-.facts{background: #eb6200; background-image: url(paw-prints/paws.png);}
+.facts{background: #eb6200;}
+/*background-image: url(paw-prints/paws.png);*/
 
 .timer-icon {color:#eb6200;}
 
