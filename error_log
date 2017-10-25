@@ -32,3 +32,4 @@
 [08-Sep-2017 14:18:39 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
 [08-Sep-2017 14:18:51 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
 [08-Sep-2017 14:19:02 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[11-Oct-2017 10:27:01 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
