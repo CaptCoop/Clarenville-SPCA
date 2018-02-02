@@ -46,6 +46,15 @@ function md_slider_manage($slid, $option = 'configure') {
     '#tree' => TRUE,
   );
 
+  $url_settings = array(
+    'get_image' => url('admin/structure/md-slider/get-background-image', array('absolute' => TRUE)),
+    'get_video_info' => url('admin/structure/md-slider/get-video-info', array('absolute' => TRUE)),
+    'get_video_settings' => url('admin/structure/md-slider/video-setting', array('absolute' => TRUE)),
+    'delete_slide' => url('admin/structure/md-slider/slide/delete', array('absolute' => TRUE)),
+  );
+
+  drupal_add_js(array('slider' => $url_settings), 'setting');
+
   $slider_tabs = array();
 
   if ($option == 'edit') {
@@ -190,6 +199,12 @@ function md_slider_configure_form($form, &$form_state, $slid = NULL) {
     '#title' => t('View video on lightbox'),
     '#default_value' => $settings['videobox'],
   );
+  
+  $form['sls_settings']['autoplay_video'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Auto play video when showing slide'),
+    '#default_value' => isset($settings['autoplay_video']) ? $settings['autoplay_video'] : FALSE,
+  );
 
 
   $form['sls_settings']['sls_ldbar'] = array(
@@ -223,6 +238,11 @@ function md_slider_configure_form($form, &$form_state, $slid = NULL) {
     '#type' => 'checkbox',
     '#title' => t('Show bullet'),
     '#default_value' => $settings['show_bullet'],
+  );
+  $form['sls_settings']['show_navigation_links'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show image name on bullet'),
+    '#default_value' => $settings['show_navigation_links'],
   );
 
   $form['sls_settings']['bullet_position'] = array(
@@ -421,6 +441,7 @@ function md_slider_configure_form_submit($form, &$form_state) {
   $settings['auto_play'] = $custom['auto_play'];
   $settings['pause_hover'] = $custom['pause_hover'];
   $settings['show_bullet'] = $custom['show_bullet'];
+  $settings['show_navigation_links'] = $custom['show_navigation_links'];
   $settings['bullet_position'] = $custom['bullet_position'];
   $settings['show_thumbnail'] = $custom['show_thumbnail'];
   $settings['thumbnail_position'] = $custom['thumbnail_position'];
@@ -439,6 +460,7 @@ function md_slider_configure_form_submit($form, &$form_state) {
   $settings['on_start'] = $custom['on_start'];
   $settings['on_end'] = $custom['on_end'];
   $settings["videobox"] = $custom["videobox"];
+  $settings["autoplay_video"] = isset($custom["autoplay_video"]) ? $custom["autoplay_video"] : FALSE;
 
   // Create new slider or update existed slider to database
   if ($custom['sls_id'] != -1) {
@@ -722,29 +744,33 @@ function md_slider_edit_form_submit($form, &$form_state) {
     $settings['transitions'] = $slide->itemsetting['transitions'];
     $settings['background_color'] = $slide->itemsetting['background_color'];
     $settings['disabled'] = isset($slide->itemsetting['disabled']) ? $slide->itemsetting['disabled'] : 0;
+    
+    # for video background
+    $settings['mp4_link'] = isset($slide->itemsetting['mp4_link']) ? $slide->itemsetting['mp4_link'] : '';
+    $settings['webm_link'] = isset($slide->itemsetting['webm_link']) ? $slide->itemsetting['webm_link'] : '';
 
     # Generate css class for layers in slide
     foreach ($slide->boxitems as $key => &$layer) {
       $css = process_layer_style((object) $layer);
       if ($css != "") {
         if (isset($layer['link']) && is_array($layer['link'])) {
-          $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key} a" . $css;
+          $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key} a" . $css;
         }
         else {
-          $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key}" . $css;
+          $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key}" . $css;
         }
       }
 
       // Generate css for hover link
       if (isset($layer['link']) && is_array($layer['link'])) {
-        $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key} {z-index: {$layer["zindex"]}!important;}";
+        $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key} {z-index: {$layer["zindex"]}!important;}";
         $css = md_slider_generate_layer_link_css($layer['link']);
         if ($css != '') {
           if ($layer['type'] != "text") {
-            $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key} a:hover img" . $css;
+            $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key} a:hover img" . $css;
           }
           else {
-            $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key} a:hover" . $css;
+            $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key} a:hover" . $css;
           }
         }
       }
@@ -892,10 +918,10 @@ function md_slider_clone($slid) {
       $css = process_layer_style((object) $layer);
       if ($css != "") {
         if (isset($layer['link']) && is_array($layer['link'])) {
-          $classes[] = ".md-layer-{$clone->slid}-{$index}-{$key} a" . $css;
+          $classes[] = ".md-objects .md-object.md-layer-{$clone->slid}-{$index}-{$key} a" . $css;
         }
         else {
-          $classes[] = ".md-layer-{$clone->slid}-{$index}-{$key}" . $css;
+          $classes[] = ".md-objects .md-object.md-layer-{$clone->slid}-{$index}-{$key}" . $css;
         }
       }
 
@@ -904,10 +930,10 @@ function md_slider_clone($slid) {
         $css = md_slider_generate_layer_link_css($layer['link']);
         if ($css != '') {
           if ($layer['type'] != "text") {
-            $classes[] = ".md-layer-{$clone->slid}-{$index}-{$key} a:hover img" . $css;
+            $classes[] = ".md-objects .md-object.md-layer-{$clone->slid}-{$index}-{$key} a:hover img" . $css;
           }
           else {
-            $classes[] = ".md-layer-{$clone->slid}-{$index}-{$key} a:hover" . $css;
+            $classes[] = ".md-objects .md-object.md-layer-{$clone->slid}-{$index}-{$key} a:hover" . $css;
           }
         }
       }
@@ -1013,6 +1039,10 @@ function md_slider_import_export_form($form, &$form_state) {
     '#value' => t('Import'),
   );
 
+  $url_settings = array(
+    'export' => url('admin/structure/md-slider/export-data', array('absolute' => TRUE))
+  );
+  drupal_add_js(array('slider' => $url_settings), 'setting');
   drupal_add_js(drupal_get_path('module', 'md_slider') . '/js/md-slider-export.js');
 
   return $form;
@@ -1073,10 +1103,10 @@ function md_slider_import_export_form_submit($form, &$form_state) {
       $css = process_layer_style((object) $layer);
       if ($css != "") {
         if (isset($layer['link']) && is_array($layer['link'])) {
-          $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key} a" . $css;
+          $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key} a" . $css;
         }
         else {
-          $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key}" . $css;
+          $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key}" . $css;
         }
       }
 
@@ -1084,10 +1114,10 @@ function md_slider_import_export_form_submit($form, &$form_state) {
         $css = md_slider_generate_layer_link_css($layer['link']);
         if ($css != '') {
           if ($layer['type'] != "text") {
-            $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key} a:hover img" . $css;
+            $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key} a:hover img" . $css;
           }
           else {
-            $classes[] = ".md-layer-{$slider->slid}-{$index}-{$key} a:hover" . $css;
+            $classes[] = ".md-objects .md-object.md-layer-{$slider->slid}-{$index}-{$key} a:hover" . $css;
           }
         }
       }

@@ -246,3 +246,4 @@
 </div>
 <div id="dlg-video" style="display:none;" title="Item setting"></div>
 <input type="hidden" value="<?php print $slider->settings['delay']; ?>" name="default-timelinewidth">
+<div id="background-video" style="display:none;" title="Background Video"></div>

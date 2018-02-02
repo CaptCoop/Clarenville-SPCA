@@ -36,7 +36,9 @@
             <input type="text" name="thumb-alt-tag" id="custom-thumb-alt">
           </div>
         </div>
-
+        <div class="choose-slide-bg-color clearfix">          
+            <a href="#" class="show-video-box" style="float: left">Background video</a>
+        </div>
         <div class="choose-slide-bg-color clearfix">
           <input type="hidden" id="slide-background-color" class="mdt-background mdt-input" value="" name="slide-background-color">
           <label style="float: left">Background Color</label>

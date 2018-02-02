@@ -424,17 +424,23 @@ function md_slider_view($machine_name, $type="block") {
       $(document).ready(function() {
           effectsIn = Drupal.settings.inEffects;
           effectsOut = Drupal.settings.outEffects;
-          var options_{$slider->slid} = Drupal.settings.md_slider_options_{$slider->slid};";
+          var options_{$slider->slid} = Drupal.settings.md_slider_options_{$slider->slid};
+          if(!window.listMegaSlide){window.listMegaSlide = [];} ";
 
     if (isset($slider->settings["on_start"]) && !empty($slider->settings["on_start"]))
-      $js_control .= "options_{$slider->slid}.OnTransitionStart = {$slider->settings["on_start"]}";
+      $js_control .= "options_{$slider->slid}.OnTransitionStart = {$slider->settings["on_start"]};";
 
     if (isset($slider->settings["on_end"]) && !empty($slider->settings["on_end"]))
-      $js_control .= "options_{$slider->slid}.OnTransitionEnd = {$slider->settings["on_end"]}";
+      $js_control .= "options_{$slider->slid}.OnTransitionEnd = {$slider->settings["on_end"]};";
 
-    $js_control .= "$('#md-slider-{$slider->slid}-{$type}').mdSlider(options_{$slider->slid});
+    $js_control .= "$('.md-slide-items').each(function(index, item){
+            if($(item).attr('id') == 'md-slider-{$slider->slid}-{$type}'){
+              listMegaSlide[index] = $('#md-slider-{$slider->slid}-{$type}').mdSlider(options_{$slider->slid});
+            }
+          });
       });
     })(jQuery);";
+    
     drupal_add_js($js_control, 'inline');
 
     // Add css files
@@ -481,9 +487,8 @@ function md_slider_features_api() {
     "md_slider" => array(
       "name" => "MD Slider",
       "feature_source" => TRUE,
-      "file" => drupal_get_path("module", "md_slider") . "/includes/md_slider.features.inc",
-      "default_hook" => "install"
-    ),
+      "file" => drupal_get_path("module", "md_slider") . "/includes/md_slider.features.inc"
+    )
   );
 }
 

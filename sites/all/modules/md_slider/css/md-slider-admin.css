@@ -790,3 +790,11 @@ ul.md-tabs-head {
     width: 100%;
     height: 100%;
 }
+.disable-tab .thumb-disable{
+    position: absolute; top: 0px; left: 0px;
+    display: block; width: 18px; height: 18px;
+    background: url(../images/disable.png) no-repeat;
+    background-size: cover;
+    border-radius: 9px; -webkit-border-radius: 9px;
+}
+.md-slidewrap .md-slide-image img{width: 100%;}

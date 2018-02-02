@@ -67,9 +67,11 @@ function template_preprocess_admin_layers_render(&$variables) {
 
     if ($layer['type'] == 'image') {
         $layer['file_url'] = '';
-        if (isset($layer['fileid'])) {
+        if (isset($layer['fileid']) && $layer['fileid'] > 0) {
             $image = file_load($layer['fileid']);
-            $layer['file_url'] = file_create_url($image->uri);
+            if (isset($image->uri)) {
+                $layer['file_url'] = file_create_url($image->uri);
+            }
         }
     }
 

@@ -28,6 +28,7 @@
     $options['loadingPosition'] = $settings['bar_position'];
     $options['showArrow'] = (boolean)$settings['show_next_prev_button'];
     $options['showBullet'] = (boolean)$settings['show_bullet'];
+    $options['showNavigationLinks'] = (boolean)$settings['show_navigation_links'];
     $options['posBullet'] = $settings['bullet_position'];
     $options['showThumb'] = (boolean)$settings['show_thumbnail'];
     $options['posThumb'] = $settings['thumbnail_position'];
@@ -39,6 +40,7 @@
         $options["videoBox"] = (boolean)$settings["videobox"];
     else
         $options["videoBox"] = FALSE;
+    $options["autoplayVideo"] = isset($settings["autoplay_video"]) ?  ((boolean) $settings["autoplay_video"]) : FALSE;
 
     drupal_add_js(array("md_slider_options_{$slider->slid}" => $options), 'setting');
 
@@ -51,6 +53,8 @@
     # Add data-thumb-width & data-thumb-height
     $data_properties[] = "data-thumb-width='{$settings['thumb_width']}'";
     $data_properties[] = "data-thumb-height='{$settings['thumb_height']}'";
+    $data_properties[] = "style='min-height:{$settings['height']}px;'";
+    
     $variables['data_properties'] = implode(' ', $data_properties);
 
     # Create css class for layers

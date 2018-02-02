@@ -108,8 +108,9 @@ function md_slider_field_formatter_view($entity_type, $entity, $field, $instance
     foreach ($items as $delta => $item) {
       if (isset($item["md_slider_id"])) {
         $content = md_slider_view($item["md_slider_id"], "field");
-        $edit_link = l(t("Edit MD Slide"), url("admin/structure/md-slider/{$item["md_slider_id"]}/edit", array("absolute" => TRUE, "query" => drupal_get_destination())));
-        $configure_link = l(t("Configure MD Slide"), url("admin/structure/md-slider/{$item["md_slider_id"]}/edit", array("absolute" => TRUE, "query" => drupal_get_destination())));
+        $slider = MDSlider::get_by_machine_name($item["md_slider_id"]);
+        $edit_link = l(t("Edit MD Slide"), url("admin/structure/md-slider/{$slider->slid}/edit", array("absolute" => TRUE, "query" => drupal_get_destination())));
+        $configure_link = l(t("Configure MD Slide"), url("admin/structure/md-slider/{$slider->slid}/edit", array("absolute" => TRUE, "query" => drupal_get_destination())));
 
         if (user_access("administer md_slider") || user_access("delete md_slider"))
           $content = "<div class=\"contextual-links-region\">

@@ -15,9 +15,9 @@
     $animals = live_adoption_stats_get_total_adoption_numbers();
     $animals+=1475;//this is the total number of adoptions since 2011
     
-    $dogs = live_adoption_stats_get_total_adopted_dogs() + 25;//the additional +25 is for 2017 only.  You'll need to delete this number in 2018
+    $dogs = live_adoption_stats_get_total_adopted_dogs();//the additional +25 is for 2017 only.  You'll need to delete this number in 2018
     
-    $catts = live_adoption_stats_get_total_adopted_cats() + 80;//same as above
+    $catts = live_adoption_stats_get_total_adopted_cats();//same as above
     
    $flik = social_counters_counters_output();
    $tlike =  $flik['facebook']['number'] + $flik['facebook1']['number'];

@@ -166,6 +166,8 @@ function process_layer_style($layer) {
             if (is_numeric($layer->fontweight) === FALSE) {
                 $font_w = substr($layer->fontweight, 0, 3);
                 $font_s = substr($layer->fontweight, 3);
+                if($font_s === 'i')
+                  $font_s = 'italic';
                 $output[] = "font-weight: {$font_w};\n";
                 $output[] = "font-style: {$font_s};\n";
             } else

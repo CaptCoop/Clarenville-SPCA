@@ -195,6 +195,7 @@ class MDSlider {
             'auto_play' => 1,
             'pause_hover' => 1,
             'show_bullet' => 1,
+            'show_navigation_links' => 0,
             'bullet_position' => 5,
             'show_thumbnail' => 1,
             'thumbnail_position' => 1,
