@@ -33,3 +33,122 @@
 [08-Sep-2017 14:18:51 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
 [08-Sep-2017 14:19:02 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
 [11-Oct-2017 10:27:01 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[12-Mar-2018 13:41:32 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[12-Mar-2018 13:41:32 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[12-Mar-2018 13:41:32 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[12-Mar-2018 13:41:33 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[12-Mar-2018 13:41:34 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[12-Mar-2018 13:42:00 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[12-Mar-2018 13:42:10 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[23-May-2018 10:17:30 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/modules/system/system.module on line 2367
+[24-May-2018 19:52:36 America/St_Johns] PHP Fatal error:  Class 'MergeQuery' not found in /home/clarenvi/public_html/sites/all/modules/st_mukam_features/st_mukam_features.pages_default.inc on line 465
+[29-May-2018 05:34:11 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[08-Jun-2018 12:11:50 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[10-Jul-2018 21:53:11 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/sites/all/modules/fivestar/includes/fivestar.field.inc on line 332
+[03-Aug-2018 14:20:51 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[11-Aug-2018 14:03:32 America/St_Johns] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/clarenvi/public_html/includes/database/database.inc on line 2227
+[13-Aug-2018 15:34:33 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[17-Aug-2018 15:50:08 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[24-Aug-2018 11:24:17 America/St_Johns] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/clarenvi/public_html/includes/database/database.inc on line 392
+[28-Aug-2018 11:39:53 America/St_Johns] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/clarenvi/public_html/includes/database/database.inc on line 751
+[06-Sep-2018 21:42:56 America/St_Johns] PHP Fatal error:  Call to undefined function social_counters_counters_output() in /home/clarenvi/public_html/sites/all/modules/live_adoption_stats/live_adoption_stats.module on line 22
+[08-Sep-2018 12:07:05 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[08-Sep-2018 16:14:24 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[11-Sep-2018 15:38:05 America/St_Johns] PHP Fatal error:  Unsupported operand types in /home/clarenvi/public_html/includes/database/query.inc on line 1954
+[11-Sep-2018 15:47:17 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/modules/file/file.field.inc on line 404
+[11-Sep-2018 15:47:17 America/St_Johns] PHP Notice:  Trying to get property of non-object in /home/clarenvi/public_html/includes/session.inc on line 178
+[11-Sep-2018 15:47:17 America/St_Johns] PHP Fatal error:  Class 'Database' not found in /home/clarenvi/public_html/includes/bootstrap.inc on line 3486
+[12-Sep-2018 17:10:31 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[14-Sep-2018 09:19:21 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[27-Sep-2018 14:44:17 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/sites/all/modules/ctools/includes/menu.inc on line 35
+[28-Sep-2018 15:40:46 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[30-Sep-2018 22:27:04 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 859
+[05-Oct-2018 09:16:05 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[05-Oct-2018 09:16:16 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[05-Oct-2018 09:16:22 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[05-Oct-2018 09:16:25 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[07-Oct-2018 11:55:22 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[19-Nov-2018 09:40:07 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[30-Nov-2018 20:53:30 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[30-Nov-2018 20:53:30 America/St_Johns] PHP Warning:  Cannot use a scalar value as an array in /home/clarenvi/public_html/includes/module.inc on line 778
+[01-Dec-2018 21:24:45 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/sites/all/modules/metatag/metatag.module on line 1585
+[07-Dec-2018 23:50:33 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[08-Dec-2018 10:27:58 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/modules/update/update.module on line 419
+[08-Dec-2018 11:56:54 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[09-Dec-2018 02:23:34 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[09-Dec-2018 10:22:19 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[09-Dec-2018 10:22:19 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[09-Dec-2018 19:42:22 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[09-Dec-2018 22:43:01 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[10-Dec-2018 21:44:33 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[11-Dec-2018 00:07:46 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[11-Dec-2018 06:07:58 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[13-Dec-2018 13:29:03 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[13-Dec-2018 16:04:13 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/includes/stream_wrappers.inc on line 373
+[15-Dec-2018 12:50:15 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[19-Dec-2018 20:54:43 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[19-Dec-2018 20:54:43 America/St_Johns] PHP Warning:  Cannot use a scalar value as an array in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[19-Dec-2018 20:54:43 America/St_Johns] PHP Warning:  Cannot use a scalar value as an array in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[19-Dec-2018 20:54:43 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 843
+[28-Dec-2018 11:21:12 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[02-Jan-2019 08:38:50 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[02-Jan-2019 08:43:50 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/sites/all/modules/data/data.module on line 391
+[02-Jan-2019 18:54:38 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/sites/all/vendor/composer/ClassLoader.php on line 224
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 799
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 803
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 799
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 803
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 799
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 803
+[07-Jan-2019 15:15:47 America/St_Johns] PHP Fatal error:  Class 'S' not found in /home/clarenvi/public_html/includes/database/database.inc on line 827
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 799
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 803
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 799
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 803
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 799
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Warning:  Illegal string offset 'SelectQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 803
+[08-Jan-2019 13:50:31 America/St_Johns] PHP Fatal error:  Class 'S' not found in /home/clarenvi/public_html/includes/database/database.inc on line 827
+[11-Jan-2019 11:02:06 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/sites/all/modules/st_mukam_features/st_mukam_features.pages_default.inc on line 2910
+[11-Jan-2019 11:02:06 America/St_Johns] PHP Notice:  Trying to get property of non-object in /home/clarenvi/public_html/includes/session.inc on line 178
+[11-Jan-2019 11:02:06 America/St_Johns] PHP Fatal error:  Class 'Database' not found in /home/clarenvi/public_html/includes/bootstrap.inc on line 3486
+[16-Jan-2019 11:54:17 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 859
+[17-Jan-2019 00:21:00 America/St_Johns] PHP Fatal error:  Class 'DeleteQuery' not found in /home/clarenvi/public_html/sites/all/modules/file_entity/file_entity.file_api.inc on line 530
+[20-Jan-2019 05:33:59 America/St_Johns] PHP Fatal error:  Class 'Database' not found in /home/clarenvi/public_html/sites/all/modules/filefield_sources_plupload/filefield_sources_plupload.module on line 12
+[22-Jan-2019 11:43:38 America/St_Johns] PHP Fatal error:  Class 'Database' not found in /home/clarenvi/public_html/includes/common.inc on line 3674
+[25-Jan-2019 10:41:29 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[25-Jan-2019 10:41:29 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 797
+[25-Jan-2019 10:41:29 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 799
+[25-Jan-2019 10:41:29 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 800
+[25-Jan-2019 10:41:29 America/St_Johns] PHP Warning:  Illegal string offset 'InsertQuery' in /home/clarenvi/public_html/includes/database/database.inc on line 803
+[25-Jan-2019 10:41:29 America/St_Johns] PHP Warning:  Illegal string offset 'I' in /home/clarenvi/public_html/sites/all/vendor/composer/ClassLoader.php on line 338
+[25-Jan-2019 10:41:29 America/St_Johns] PHP Warning:  include(): Failed opening '' for inclusion (include_path='.:/opt/alt/php56/usr/share/pear:/opt/alt/php56/usr/share/php') in /home/clarenvi/public_html/sites/all/vendor/composer/ClassLoader.php on line 412
+[25-Jan-2019 20:21:30 America/St_Johns] PHP Fatal error:  Class name must be a valid object or a string in /home/clarenvi/public_html/includes/database/database.inc on line 892
+[16-Apr-2019 19:45:50 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[16-Apr-2019 19:45:51 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[16-Apr-2019 19:45:51 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[16-Apr-2019 19:45:51 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[16-Apr-2019 19:45:52 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[16-Apr-2019 19:45:53 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[16-Apr-2019 19:46:01 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[16-Apr-2019 19:46:05 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[19-Apr-2019 20:58:46 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[19-Apr-2019 20:58:46 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[19-Apr-2019 20:58:47 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[19-Apr-2019 20:58:47 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[19-Apr-2019 20:58:47 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[19-Apr-2019 20:58:47 America/St_Johns] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 3840001 bytes) in /home/clarenvi/public_html/modules/system/image.gd.inc on line 376
+[01-May-2019 10:57:28 America/St_Johns] PHP Fatal error:  Call to undefined function menu_get_object() in /home/clarenvi/public_html/includes/theme.inc on line 2582
